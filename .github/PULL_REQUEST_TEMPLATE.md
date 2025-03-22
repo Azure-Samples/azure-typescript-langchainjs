@@ -26,8 +26,8 @@ What kind of change does this Pull Request introduce?
 *  Get the code
 
 ```
-git clone [repo-address]
-cd [repo-name]
+git clone https://github.com/Azure-Samples/azure-typescript-langchainjs.git
+cd azure-typescript-langchainjs
 git checkout [branch-name]
 npm install
 ```
