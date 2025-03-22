@@ -20,63 +20,50 @@ This project provides the following features:
 
 ### Prerequisites
 
-- Node.js 18.x or higher
-- An Azure account with access to Azure OpenAI services
-- A deployed Azure OpenAI model
+* Node.js 18.x or higher
+* An Azure account with access to Azure OpenAI services
+* A deployed Azure OpenAI model
 
 ### Setting Up Azure OpenAI
 
-You can set up Azure OpenAI in two ways:
-
-#### Option 1: Direct Access to Azure OpenAI Service (Used in this project)
-
-1. Create an Azure OpenAI resource in the Azure Portal
-   - Navigate to Azure Portal → Create Resource → Search for "Azure OpenAI"
-   - Configure your resource with appropriate resource group and region
-
-2. Deploy an Azure OpenAI model
-   - Navigate to your Azure OpenAI resource
-   - Select "Model deployments" in the left navigation
-   - Deploy a suitable model (e.g., GPT-4) and note the deployment name
-
-3. Get your API credentials
-   - Go to your Azure OpenAI resource and select "Keys and Endpoint"
-   - Note your key and endpoint for the environment setup
-
-#### Option 2: Using Azure AI Foundry (Alternative approach)
+You can set up Azure OpenAI using Azure AI Foundry:
 
 1. Create an Azure AI Foundry Hub in the Azure Portal
-   - Navigate to Azure Portal → Create Resource → Search for "Azure AI Foundry"
-   - Configure your Hub with appropriate resource group and region
+   * Navigate to Azure Portal → Create Resource → Search for "Azure AI Foundry"
+   * Configure your Hub with appropriate resource group and region
 
 2. Create a Project within your Hub
-   - Launch Azure AI Foundry from your newly created Hub
-   - Create a new project and give it a name
+   * Launch Azure AI Foundry from your newly created Hub
+   * Create a new project and give it a name
 
 3. Connect or deploy Azure OpenAI models
-   - Connect existing Azure OpenAI resources or deploy new models
-   - Navigate to Models & Endpoints in your project
-   - Deploy or connect to your preferred model (e.g., GPT-4o)
+   * Connect existing Azure OpenAI resources or deploy new models
+   * Navigate to Models & Endpoints in your project
+   * Deploy or connect to your preferred model (e.g., GPT-4o)
 
 ### Installation
 
 1. Clone the repository
+
    ```bash
    git clone https://github.com/Azure-Samples/azure-typescript-langchainjs.git
    cd azure-typescript-langchainjs
    ```
 
 2. Install dependencies
+
    ```bash
    npm install
    ```
 
 3. Configure environment variables
+
    ```bash
    cp .env.example .env.local
    ```
-   
+
    Then edit `.env.local` with your Azure OpenAI credentials:
+
    ```
    AZURE_OPENAI_API_KEY=your_api_key_here
    AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
@@ -89,6 +76,7 @@ You can set up Azure OpenAI in two ways:
 ### Quickstart
 
 1. Start the development server
+
    ```bash
    npm run dev
    ```
@@ -193,16 +181,16 @@ This project can be deployed to Azure in several ways:
 1. Create a new Static Web App in the Azure Portal
 2. Connect to your GitHub repository
 3. Configure the build settings as follows:
-   - Build command: `npm run build`
-   - Output location: `out`
+   * Build command: `npm run build`
+   * Output location: `out`
 4. Add your environment variables in the Azure Portal under Configuration → Application settings
 
 ### Azure App Service
 
 1. Create a new App Service in the Azure Portal
 2. Configure GitHub Actions for continuous deployment:
-   - Create a `.github/workflows/azure-webapps-node.yml` file in your repository
-   - Use the Azure Web App deployment template
+   * Create a `.github/workflows/azure-webapps-node.yml` file in your repository
+   * Use the Azure Web App deployment template
 3. Add the necessary environment variables in the Azure Portal
 
 ## Contributing
@@ -211,12 +199,12 @@ Please refer to [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of 
 
 ## Resources
 
-- [Azure OpenAI Service Documentation](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/)
-- [Azure AI Foundry Documentation](https://learn.microsoft.com/en-us/azure/ai-foundry/)
-- [Azure OpenAI in Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-studio/azure-openai-in-ai-studio)
-- [LangChain.js Documentation](https://js.langchain.com/docs/)
-- [LangChain.js Azure OpenAI Integration](https://js.langchain.com/docs/integrations/chat/azure/)
-- [Next.js 15.2 Documentation](https://nextjs.org/docs)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
-- [Azure Static Web Apps Documentation](https://docs.microsoft.com/en-us/azure/static-web-apps/)
-- [Azure App Service Documentation](https://docs.microsoft.com/en-us/azure/app-service/)
+* [Azure OpenAI Service Documentation](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/)
+* [Azure AI Foundry Documentation](https://learn.microsoft.com/en-us/azure/ai-foundry/)
+* [Azure OpenAI in Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-studio/azure-openai-in-ai-studio)
+* [LangChain.js Documentation](https://js.langchain.com/docs/)
+* [LangChain.js Azure OpenAI Integration](https://js.langchain.com/docs/integrations/chat/azure/)
+* [Next.js 15.2 Documentation](https://nextjs.org/docs)
+* [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+* [Azure Static Web Apps Documentation](https://docs.microsoft.com/en-us/azure/static-web-apps/)
+* [Azure App Service Documentation](https://docs.microsoft.com/en-us/azure/app-service/)
