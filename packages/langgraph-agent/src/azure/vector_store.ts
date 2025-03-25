@@ -35,7 +35,6 @@ export async function getVectorStoreRetrieverChain2(
     lastMessage && typeof lastMessage.content === "string"
       ? lastMessage.content
       : "";
-  console.log(userInput);
 
   const questionAnsweringPrompt = ChatPromptTemplate.fromMessages([
     [
