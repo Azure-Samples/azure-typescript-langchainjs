@@ -1,0 +1,21 @@
+{
+  "name": "azure-typescript-langchainjs",
+  "version": "1.0.0",
+  "description": "(short, 1-3 sentenced, description of the project)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Azure-Samples/azure-typescript-langchainjs.git"
+  },
+  "keywords": ["langchainjs", "typescript", "azure", "azure-ai-search"],
+  "author": "diberry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Azure-Samples/azure-typescript-langchainjs/issues"
+  },
+  "homepage": "https://github.com/Azure-Samples/azure-typescript-langchainjs#readme",
+  "workspaces": ["packages/*"]
+}

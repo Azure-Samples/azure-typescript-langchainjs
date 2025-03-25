@@ -1,0 +1,7 @@
+{
+    "dependencies": [],
+    "graphs": {
+      "agent": "./src/graph.ts:vector_store_graph"
+    },
+    "env": ".env"
+  }

@@ -134,3 +134,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Custom ignore patterns (non-duplicates)
+.langgraph_api
+.DS_Store/
+build/
