@@ -1,10 +1,11 @@
 import { StateAnnotation } from "./state.js";
+import { END, VECTOR_STORE_NODE } from "../config/nodes.js";
 
 export const route = (
   state: typeof StateAnnotation.State,
-): "__end__" | "callModel" => {
+): typeof END | typeof VECTOR_STORE_NODE => {
   if (state.messages.length > 0) {
-    return "__end__";
+    return END;
   }
-  return "callModel";
+  return VECTOR_STORE_NODE;
 };
