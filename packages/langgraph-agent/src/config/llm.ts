@@ -1,5 +1,3 @@
-import "dotenv/config";
-
 const key = process.env.AZURE_OPENAI_COMPLETE_KEY;
 const instance = process.env.AZURE_OPENAI_COMPLETE_INSTANCE;
 const apiVersion =

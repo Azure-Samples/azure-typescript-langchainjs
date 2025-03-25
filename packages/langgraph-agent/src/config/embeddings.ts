@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 const key = process.env.AZURE_OPENAI_EMBEDDING_KEY;
 const instance = process.env.AZURE_OPENAI_EMBEDDING_INSTANCE;
 const apiVersion =
