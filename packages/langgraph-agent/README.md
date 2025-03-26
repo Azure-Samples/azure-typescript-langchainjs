@@ -1,3 +1,6 @@
+---
+ms.date: 03/26/2025
+---
 # Intelligent documentation search with LangChainjs and Azure AI Search
 
 Use LangChainjs, as an AI framework to quickly create an AI agent which allows a _NorthWind_ company employee to ask human resources related questions. The benefit of adopting a framework is that much of the boilerplate code you need to write for AI agents and Azure service integration is abstracted away. This allows you to immediately focus on your business need.  
