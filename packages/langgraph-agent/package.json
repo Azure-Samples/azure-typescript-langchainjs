@@ -6,11 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "load_data": "node ./dist/loadVectorStore.js",
-    "studio": "node -r dotenv/config ./node_modules/@langchain/langgraph-cli/bin/cli.js dev",
-    "studio:without_dotenv": "npx @langchain/langgraph-cli dev",
+    "studio": "npx @langchain/langgraph-cli dev",
     "prebuild": "prettier --write './src/**/*.{ts,tsx}'",
     "build": "tsc",
-    "start": "node -r dotenv/config ./dist/index.js"
+    "start": "node -r dotenv/config ./dist/index.js",
+    "langgraph_cli:version": "npx @langchain/langgraph-cli --version"
   },
   "author": "",
   "license": "ISC",
@@ -24,9 +24,10 @@
     "langchain": "^0.3.19"
   },
   "devDependencies": {
+    "@langchain/langgraph-cli": "^0.0.18",
     "@tsconfig/recommended": "^1.0.8",
+    "dotenv": "^16.4.7",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.2",
-    "dotenv": "^16.4.7"
+    "typescript": "^5.8.2"
   }
 }

@@ -2,6 +2,7 @@ import { RunnableConfig } from "@langchain/core/runnables";
 import { StateAnnotation } from "../langchain/state.js";
 import { AzureOpenAI } from "@langchain/openai";
 import { LLM_CONFIG } from "../config/llm.js";
+
 export const getLlmClient = (): AzureOpenAI => {
   return new AzureOpenAI({
     ...LLM_CONFIG,
