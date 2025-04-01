@@ -1,4 +1,4 @@
-import fs from 'fs/promises';
+import fs from "fs/promises";
 import path from "path";
 
 export async function updateEnv(key: string, value: string): Promise<void> {

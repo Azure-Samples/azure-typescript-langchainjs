@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { getLlmClient } from "./llm.js";
+import { getLlmChatClient } from "./llm.js";
 import { StateAnnotation } from "../langchain/state.js";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { BaseMessage } from "@langchain/core/messages";
@@ -18,8 +18,9 @@ export async function requiresHrResources(
   if (lastUserMessage && typeof lastUserMessage.content === "string") {
     const question = `Does the following question require a specific companies' HR resources such as employee handbook, company medical benefits, vacation policies, and promotion, salary, and role criteria. Answer no if this requires employee data specific to the asker: '${lastUserMessage.content}'. Answer with only "yes" or "no".`;
 
-    const llm = getLlmClient();
-    const answer = (await llm.invoke(question)).toLocaleLowerCase().trim();
+    const llm = getLlmChatClient();
+    const response = await llm.invoke(question);
+    const answer = response.content.toLocaleLowerCase().trim();
     console.log(`LLM question (is HR required): ${question}`);
     console.log(`LLM answer (is HR required): ${answer}`);
     hrRequired = answer === "yes";

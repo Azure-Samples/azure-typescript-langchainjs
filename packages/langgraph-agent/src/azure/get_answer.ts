@@ -1,7 +1,7 @@
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
-import { getLlmClient } from "./llm.js";
+import { getLlmChatClient } from "./llm.js";
 import { StateAnnotation } from "../langchain/state.js";
 import { AIMessage } from "@langchain/core/messages";
 import { getReadOnlyVectorStore } from "./vector_store.js";
@@ -30,7 +30,7 @@ export async function getAnswer(
   ]);
 
   const combineDocsChain = await createStuffDocumentsChain({
-    llm: getLlmClient(),
+    llm: getLlmChatClient(),
     prompt: questionAnsweringPrompt,
   });
 

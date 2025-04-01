@@ -1,20 +1,20 @@
 import { RunnableConfig } from "@langchain/core/runnables";
 import { StateAnnotation } from "../langchain/state.js";
-import { AzureOpenAI } from "@langchain/openai";
+import { AzureChatOpenAI } from "@langchain/openai";
 import { LLM_CONFIG } from "../config/llm.js";
 
-export const getLlmClient = (): AzureOpenAI => {
-  return new AzureOpenAI({
+export const getLlmChatClient = (): AzureChatOpenAI => {
+  return new AzureChatOpenAI({
     ...LLM_CONFIG,
     temperature: 0,
   });
 };
 
-export const callCompletionModel = async (
+export const callChatCompletionModel = async (
   state: typeof StateAnnotation.State,
   _config: RunnableConfig,
 ): Promise<typeof StateAnnotation.Update> => {
-  const llm = new AzureOpenAI({
+  const llm = new AzureChatOpenAI({
     ...LLM_CONFIG,
     temperature: 0,
   });
@@ -27,7 +27,7 @@ export const callCompletionModel = async (
       ...state.messages,
       {
         role: "assistant",
-        content: completion,
+        content: completion.content,
       },
     ],
   };
