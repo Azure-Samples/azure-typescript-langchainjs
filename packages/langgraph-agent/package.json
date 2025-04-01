@@ -9,7 +9,7 @@
     "studio": "npx @langchain/langgraph-cli dev",
     "prebuild": "prettier --write './src/**/*.{ts,tsx}'",
     "build": "tsc",
-    "start": "node -r dotenv/config ./dist/index.js",
+    "start": "node ./dist/index.js",
     "langgraph_cli:version": "npx @langchain/langgraph-cli --version"
   },
   "author": "",
