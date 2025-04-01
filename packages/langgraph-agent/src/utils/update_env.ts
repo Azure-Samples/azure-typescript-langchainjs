@@ -1,11 +1,11 @@
-import fs from "fs";
+import fs from 'fs/promises';
 import path from "path";
 
 export async function updateEnv(key: string, value: string): Promise<void> {
   const envPath = path.join(process.cwd(), ".env");
   let envConfig = "";
   try {
-    envConfig = await fs.promises.readFile(envPath, "utf8");
+    envConfig = await fs.readFile(envPath, "utf8");
   } catch (err) {
     // File doesn't exist; continue with empty string.
   }
@@ -17,5 +17,5 @@ export async function updateEnv(key: string, value: string): Promise<void> {
   } else {
     envConfig += envConfig.length > 0 ? "\n" + newLine : newLine;
   }
-  await fs.promises.writeFile(envPath, envConfig, "utf8");
+  await fs.writeFile(envPath, envConfig, "utf8");
 }
