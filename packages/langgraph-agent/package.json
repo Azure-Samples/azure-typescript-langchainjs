@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "load_data": "node ./dist/loadVectorStore.js",
+    "load_data": "node -r dotenv/config ./dist/scripts/loadVectorStore.js",
     "studio": "npx @langchain/langgraph-cli dev",
     "prebuild": "prettier --write './src/**/*.{ts,tsx}'",
     "build": "tsc",
