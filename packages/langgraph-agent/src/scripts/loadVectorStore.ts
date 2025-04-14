@@ -13,10 +13,12 @@ const NORTHWIND_PDF_DIRECTORY = "../../data";
 async function loadData(embeddings: EmbeddingsInterface): Promise<void> {
   let dataLoaded = process.env.NORTHWIND_PDF_LOADED;
 
-  if (!dataLoaded || dataLoaded === "true") {
+  if (!dataLoaded || dataLoaded === "false") {
     const dirPath = path.join(__dirname, NORTHWIND_PDF_DIRECTORY);
     await loadPdfsFromDirectory(embeddings, dirPath);
     await updateEnv("NORTHWIND_PDF_LOADED", "true");
+  } else {
+    console.log("Data already loaded, skipping...");
   }
 }
 
