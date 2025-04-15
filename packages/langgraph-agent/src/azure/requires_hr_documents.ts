@@ -16,7 +16,7 @@ export async function requiresHrResources(
   let pdfDocsRequired = false;
 
   if (lastUserMessage && typeof lastUserMessage.content === "string") {
-    const question = `Does the following question require a HR PDF documents such as employee handbook, company medical benefits, vacation policies, and promotion, salary, and role criteria. Answer no if this requires data specific to the asker: '${lastUserMessage.content}'. Answer with only "yes" or "no".`;
+    const question = `Does the following question require general company policy information that could be found in HR documents like employee handbooks, benefits overviews, or company-wide policies, then answer yes. Answer no if this requires personal employee-specific information that would require access to an individual's private data, employment records, or personalized benefits details: '${lastUserMessage.content}'. Answer with only "yes" or "no".`;
 
     const llm = getLlmChatClient();
     const response = await llm.invoke(question);
