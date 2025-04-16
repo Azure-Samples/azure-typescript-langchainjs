@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run build --workspaces --if-present && npm link",
-    "postbuild": "cd packages/langgraph-agent && npm link && cd ../server-api && npm link langgraph-agent",
-    "build:docker": "docker build -t langchain-api .",
-    "start": "node packages/server-api/dist/server.js",
+    "postbuild": "cd packages/langgraph_agent && npm link && cd ../server_api && npm link langgraph_agent",
+    "build:docker": "docker build -t langchain_api .",
+    "start": "node packages/server_api/dist/server.js",
     "dev": "npm run dev --workspaces --if-present",
-    "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./packages/langgraph-agent/.env langchain-api"
+    "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./packages/langgraph_agent/.env langchain_api"
   },
   "repository": {
     "type": "git",
