@@ -10,19 +10,21 @@ export async function ask_agent(question: string) {
   return finalState;
 }
 export async function get_answer(question: string) {
-  return ask_agent(question)
-    .then((response: any) => {
-      console.log(
-        response.messages
-          .filter(
-            (m: any) =>
-              m &&
-              m.constructor?.name?.toLowerCase() ===
-                AIMESSAGE.toLocaleLowerCase(),
-          )
-          .map((m: any) => m.content)
-          .join("\n"),
-      );
-    })
-    .catch(console.error);
+  try {
+    const answerResponse = await ask_agent(question);
+
+    const answer = answerResponse.messages
+      .filter(
+        (m: any) =>
+          m &&
+          m.constructor?.name?.toLowerCase() === AIMESSAGE.toLocaleLowerCase(),
+      )
+      .map((m: any) => m.content)
+      .join("\n");
+
+    return answer;
+  } catch (e) {
+    console.error("Error in get_answer:", e);
+    throw e;
+  }
 }
