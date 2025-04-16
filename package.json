@@ -9,7 +9,8 @@
     "build:docker": "docker build -t langchain_api .",
     "start": "node packages/server_api/dist/server.js",
     "dev": "npm run dev --workspaces --if-present",
-    "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./packages/langgraph_agent/.env langchain_api"
+    "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./packages/langgraph_agent/.env langchain_api",
+    "dev:studio": "npm run studio -w packages/langgraph_agent"
   },
   "repository": {
     "type": "git",

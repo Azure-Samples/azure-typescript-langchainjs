@@ -160,6 +160,10 @@ The agent can answer questions about the HR documents, such as:
 2. "Tell me about dental coverage in the Health Plus plan"
 3. "What does the employee handbook say about vacation time?"
 
+## Troubleshooting
+
+* LangStudio with devcontainers: [tracking issue](https://github.com/langchain-ai/langgraph-studio/issues/258)
+
 ## License
 
 This project is licensed under the ISC License - see the [LICENSE.md](LICENSE.md) file for details.
