@@ -1,0 +1,7 @@
+{
+    "dependencies": [],
+    "graphs": {
+      "agent": "./src/graph.ts:hr_documents_answer_graph"
+    },
+    "env": ".env"
+  }
