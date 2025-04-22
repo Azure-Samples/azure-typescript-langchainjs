@@ -43,7 +43,7 @@ echo "Resource group name: $RESOURCE_GROUP_NAME"
 AZURE_AI_RESOURCE_NAME="azure-ai-resource-${RANDOM_SUFFIX}"
 OPENAI_RESOURCE_NAME="openai-resource-${RANDOM_SUFFIX}"
 TEXT_EMBEDDING_DEPLOYMENT_NAME="text-embedding-ada-002"
-LLM_DEPLOYMENT_NAME="gpt-4o-mini"
+LLM_DEPLOYMENT_NAME="gpt-4o"
 API_VERSION="2025-01-01-preview"
 
 # Set the subscription
