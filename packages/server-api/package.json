@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && node -r dotenv/config ./dist/server.js  dotenv_config_path=../langgraph-agent/.env"
+    "start": "npm run build && node -r dotenv/config ./dist/server-api/src/server.js  dotenv_config_path=../.env"
   },
   "keywords": [],
   "author": "",

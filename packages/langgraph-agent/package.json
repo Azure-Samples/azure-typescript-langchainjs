@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "load_data": "node -r dotenv/config ./dist/scripts/load_vector_store.js",
+    "load_data": "node -r dotenv/config ./dist/scripts/load_vector_store.js dotenv_config_path=../.env",
     "studio": "npm run build && npx @langchain/langgraph-cli dev",
     "prebuild": "prettier --write './src/**/*.{ts,tsx}'",
     "build": "tsc",
