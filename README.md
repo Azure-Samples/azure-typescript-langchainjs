@@ -57,7 +57,7 @@ Create the following resources:
 Copy the sample environment file:
 
 ```bash
-cp ./packages/langgraph-agent/sample.env ./packages/langgraph-agent/.env
+cp .//sample.env ./.env
 ```
 
 Update the `.env` file with the values from your Azure resources:
