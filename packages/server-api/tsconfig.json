@@ -15,7 +15,7 @@
       "allowJs": true,
       "strict": true,
       "strictFunctionTypes": false,
-      "outDir": "dist",
+      "outDir": "dist/",
       "types": ["node"],      "resolveJsonModule": true,
       "sourceMap": true,
       "paths": {

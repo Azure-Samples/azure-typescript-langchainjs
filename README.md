@@ -99,9 +99,8 @@ npm install
 ### 5. Load data into vector store
 
 ```bash
-cd packages/langgraph-agent
 npm run build
-npm run load_data
+npm run load_data --workspace=langgraph-agent
 ```
 
 ### 6. Run the application
@@ -109,8 +108,7 @@ npm run load_data
 #### Run the API server
 
 ```bash
-cd packages/server-api
-npm run start
+npm run start --workspace=server-api
 ```
 
 The server will be available at http://localhost:3000.
@@ -118,8 +116,7 @@ The server will be available at http://localhost:3000.
 #### Run the LangGraph Studio (optional)
 
 ```bash
-cd packages/langgraph-agent
-npm run studio
+npm run studio --workspace=langgraph-agent
 ```
 
 This will start the LangGraph Studio interface where you can visualize and debug the agent's workflow.
