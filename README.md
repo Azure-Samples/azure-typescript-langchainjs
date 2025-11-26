@@ -88,9 +88,6 @@ npm run start
 
 The server will be available at http://localhost:3000. In Visual Studio Code, you can use the Rest Client HTTP files at `./packages/server-api/http` to call the server APIs to use the agent. 
 
-```
-```
-
 #### Run the LangGraph Studio (optional)
 
 ```bash
