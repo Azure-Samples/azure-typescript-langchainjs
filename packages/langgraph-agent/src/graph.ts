@@ -1,12 +1,16 @@
 import { StateGraph } from "@langchain/langgraph";
-import { StateAnnotation } from "./langchain/state.js";
-import { route as endRoute } from "./langchain/check_route_end.js";
-import { getAnswer } from "./azure/get_answer.js";
-import { START, ANSWER_NODE, DECISION_NODE } from "./config/nodes.js";
+import {
+  START,
+  ANSWER_NODE,
+  DECISION_NODE,
+  route as endRoute,
+  StateAnnotation,
+} from "./langchain/nodes.js";
+import { getAnswer } from "./langchain/node_get_answer.js";
 import {
   requiresHrResources,
   routeRequiresHrResources,
-} from "./azure/requires_hr_documents.js";
+} from "./langchain/node_requires_hr_documents.js";
 
 const builder = new StateGraph(StateAnnotation)
   .addNode(DECISION_NODE, requiresHrResources)

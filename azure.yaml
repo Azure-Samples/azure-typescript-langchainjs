@@ -1,0 +1,22 @@
+name: azure-typescript-langchainjs
+metadata:
+  template: azure-typescript-langchainjs
+
+infra:
+  bicep:
+    path: ./infra/main.bicep
+    parameters:
+      userObjectId: ${AZURE_PRINCIPAL_ID}
+
+# To run the hook after post-provision,
+# azd env get-values
+hooks:
+  postprovision:
+    posix: 
+      sh: bash
+      run: azd env get-values > .env
+    windows:
+      shell: pwsh
+      run: azd env get-values > .env
+
+services: {}

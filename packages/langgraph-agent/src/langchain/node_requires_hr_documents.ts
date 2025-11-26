@@ -1,9 +1,9 @@
 // @ts-nocheck
-import { getLlmChatClient } from "./llm.js";
+import { getLlmChatClient } from "../azure/llm.js";
 import { StateAnnotation } from "../langchain/state.js";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { BaseMessage } from "@langchain/core/messages";
-import { ANSWER_NODE, END } from "../config/nodes.js";
+import { ANSWER_NODE, END } from "./nodes.js";
 
 const PDF_DOCS_REQUIRED = "Answer requires HR PDF docs.";
 
