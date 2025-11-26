@@ -7,11 +7,10 @@
     "build": "npm run build --workspaces --if-present && npm link",
     "postbuild": "cd packages/langgraph-agent && npm link && cd ../server-api && npm link langgraph-agent",
     "build:docker": "docker build -t langchain-api .",
-    "start": "node packages/server-api/dist/server-api/src/server.js",
+    "start": "npm run start -w server-api",
     "dev": "npm run dev --workspaces --if-present",
     "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./.env langchain-api",
-    "load-data": "npm run load_data --workspace=packages/langgraph-agent",
-    "create-index": "npm run create-index --workspace=packages/langgraph-agent"
+    "load_data": "npm run load_data --workspace=packages/langgraph-agent"
   },
   "repository": {
     "type": "git",
