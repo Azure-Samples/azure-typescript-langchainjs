@@ -16,9 +16,10 @@ const shared = {
   azureOpenAIApiEmbeddingsDeploymentName: model,
   azureOpenAIApiVersion: apiVersion,
   dimensions: 1536, // for text-embedding-3-small
-  batchSize: 5,
+  batchSize: 3,
   maxRetries: 5,
   timeout: 60000,
+  requestTimeoutMs: 60000,
 };
 
 export const EMBEDDINGS_KEY_CONFIG = {
@@ -65,7 +66,9 @@ export async function loadPdfsFromDirectory(
         console.log(`PDF: Loading ${fullPath}`);
         const docs = await pdfLoader.load();
 
-        console.log(`PDF: Sending ${fullPath} to index`);
+        console.log(
+          `PDF: Sending ${fullPath} to index with ${docs.length} docs`,
+        );
         const storeResult = await loadDocsIntoAiSearchVector(embeddings, docs);
         console.log(`PDF: Indexing result: ${JSON.stringify(storeResult)}`);
 

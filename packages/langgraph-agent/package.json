@@ -7,7 +7,7 @@
     ".": "./dist/index.js"
   },
   "scripts": {
-    "load_data": "node --env-file ../../.env ./dist/scripts/load_vector_store.js",
+    "load_data": "npm run build && node --env-file ../../.env ./dist/scripts/load_vector_store.js",
     "studio": "npm run build && npx @langchain/langgraph-cli dev",
     "prebuild": "prettier --write './src/**/*.{ts,tsx}'",
     "build": "tsc",

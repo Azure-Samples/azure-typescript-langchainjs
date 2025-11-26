@@ -39,7 +39,6 @@ const start = async (): Promise<void> => {
     try {
     
       console.log('Starting server...')
-      console.log(process.env);
 
       await fastify.listen({ port: 3000, host: '0.0.0.0' })  // Added host for container compatibility
       const address = fastify.server.address();
