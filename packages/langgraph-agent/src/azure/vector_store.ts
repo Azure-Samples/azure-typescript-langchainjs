@@ -5,7 +5,6 @@ import {
 import type { Document } from "@langchain/core/documents";
 import type { EmbeddingsInterface } from "@langchain/core/embeddings";
 import { getEmbeddingClient } from "./embeddings.js";
-import {} from "@langchain/community/vectorstores/azure_aisearch";
 import { CREDENTIAL } from "../azure/azure-credential.js";
 import { AzureAISearchConfig } from "@langchain/community/vectorstores/azure_aisearch";
 
