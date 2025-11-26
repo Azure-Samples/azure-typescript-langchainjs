@@ -88,7 +88,25 @@ npm run start
 
 The server will be available at http://localhost:3000. In Visual Studio Code, you can use the Rest Client HTTP files at `./packages/server-api/http` to call the server APIs to use the agent. 
 
-#### Run the LangGraph Studio (optional)
+## API Usage
+
+Use the following API to submit a question: 
+
+```bash
+curl -X POST http://localhost:3000/answer \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What are the standard benefit options?"}' 
+```
+
+## Example Questions
+
+The agent can answer questions about the HR documents, such as:
+
+1. "What are the standard benefit options?"
+2. "Tell me about dental coverage in the Health Plus plan"
+3. "What does the employee handbook say about vacation time?"
+
+## Run the LangGraph Studio (optional)
 
 ```bash
 npm run studio
@@ -109,28 +127,7 @@ npm run start:docker
 
 This will build a Docker image and run it, exposing the API server on port 3000.
 
-## API Usage
 
-The API server exposes the following endpoints:
-
-- `GET /`: Health check endpoint
-- `POST /answer`: Submit a question to the agent
-
-Example request:
-
-```bash
-curl -X POST http://localhost:3000/answer \
-  -H "Content-Type: application/json" \
-  -d '{"question": "What are the standard benefit options?"}' 
-```
-
-## Example Questions
-
-The agent can answer questions about the HR documents, such as:
-
-1. "What are the standard benefit options?"
-2. "Tell me about dental coverage in the Health Plus plan"
-3. "What does the employee handbook say about vacation time?"
 
 ## License
 
