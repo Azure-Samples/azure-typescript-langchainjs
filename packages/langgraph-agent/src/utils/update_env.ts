@@ -1,11 +1,17 @@
 import fs from "fs/promises";
 import path from "path";
 
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const filePath = path.join(__dirname, process.env.ENV_PATH || "../../", ".env");
+
 export async function updateEnv(key: string, value: string): Promise<void> {
-  const envPath = path.join(process.cwd(), ".env");
   let envConfig = "";
   try {
-    envConfig = await fs.readFile(envPath, "utf8");
+    envConfig = await fs.readFile(filePath, "utf8");
   } catch (err) {
     // File doesn't exist; continue with empty string.
   }
@@ -17,5 +23,5 @@ export async function updateEnv(key: string, value: string): Promise<void> {
   } else {
     envConfig += envConfig.length > 0 ? "\n" + newLine : newLine;
   }
-  await fs.writeFile(envPath, envConfig, "utf8");
+  await fs.writeFile(filePath, envConfig, "utf8");
 }

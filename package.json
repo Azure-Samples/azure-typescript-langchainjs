@@ -9,23 +9,31 @@
     "build:docker": "docker build -t langchain-api .",
     "start": "node packages/server-api/dist/server-api/src/server.js",
     "dev": "npm run dev --workspaces --if-present",
-    "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./.env langchain-api"
+    "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./.env langchain-api",
+    "load-data": "npm run load_data --workspace=packages/langgraph-agent",
+    "create-index": "npm run create-index --workspace=packages/langgraph-agent"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Azure-Samples/azure-typescript-langchainjs.git"
   },
-  "keywords": ["langchainjs", "typescript", "azure", "azure-ai-search"],
+  "keywords": [
+    "langchainjs",
+    "typescript",
+    "azure",
+    "azure-ai-search"
+  ],
   "author": "diberry",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Azure-Samples/azure-typescript-langchainjs/issues"
   },
   "homepage": "https://github.com/Azure-Samples/azure-typescript-langchainjs#readme",
-  "workspaces": ["packages/*"],
-  "dependencies": {
-    "typescript": "^5.8.3",
-    "dotenv": "^16.4.7",
-    "prettier": "^3.5.3"
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
   }
 }

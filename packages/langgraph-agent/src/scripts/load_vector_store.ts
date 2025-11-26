@@ -1,4 +1,4 @@
-import { loadPdfsFromDirectory } from "../azure/find_pdfs.js";
+import { loadPdfsFromDirectory } from "../azure/embeddings.js";
 import { updateEnv } from "../utils/update_env.js";
 import { getEmbeddingClient } from "../azure/embeddings.js";
 import { fileURLToPath } from "url";
@@ -12,6 +12,7 @@ const NORTHWIND_PDF_DIRECTORY = "../../data";
 
 async function loadData(embeddings: EmbeddingsInterface): Promise<void> {
   let dataLoaded = process.env.NORTHWIND_PDF_LOADED;
+  console.log(dataLoaded);
 
   if (!dataLoaded || dataLoaded === "false") {
     const dirPath = path.join(__dirname, NORTHWIND_PDF_DIRECTORY);
