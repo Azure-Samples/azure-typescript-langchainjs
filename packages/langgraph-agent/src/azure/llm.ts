@@ -1,44 +1,7 @@
 import { RunnableConfig } from "@langchain/core/runnables";
-import { StateAnnotation } from "../langchain/nodes.js";
+import { StateAnnotation } from "../langchain/state.js";
 import { AzureChatOpenAI } from "@langchain/openai";
-import { azureADTokenProvider_OpenAI } from "./azure-credential.js";
-
-const key = process.env.AZURE_OPENAI_COMPLETE_KEY;
-const instance = process.env.AZURE_OPENAI_COMPLETE_INSTANCE;
-const apiVersion =
-  process.env.AZURE_OPENAI_COMPLETE_API_VERSION || "2024-10-21";
-const model = process.env.AZURE_OPENAI_COMPLETE_MODEL || "gpt-4o";
-const maxTokens = process.env.AZURE_OPENAI_COMPLETE_MAX_TOKENS;
-const basePath = process.env.AZURE_OPENAI_BASE_PATH;
-
-export const LLM_KEY_CONFIG = {
-  model,
-  azureOpenAIApiKey: key,
-  azureOpenAIApiInstanceName: instance,
-  azureOpenAIApiDeploymentName: model,
-  azureOpenAIApiVersion: apiVersion,
-  maxTokens: maxTokens ? parseInt(maxTokens, 10) : 100,
-  maxRetries: 1,
-  timeout: 60000,
-};
-
-export const LLM_CONFIG_PASSWORDLESS = {
-  model,
-  azureOpenAIApiKey: undefined,
-  azureOpenAIApiInstanceName: instance,
-  azureOpenAIApiDeploymentName: model,
-  azureOpenAIApiVersion: apiVersion,
-  azureOpenAIBasePath: basePath,
-  azureADTokenProvider: azureADTokenProvider_OpenAI,
-  maxTokens: maxTokens ? parseInt(maxTokens, 10) : 100,
-  maxRetries: 1,
-  timeout: 60000,
-};
-
-export const LLM_CONFIG =
-  process.env.SET_PASSWORDLESS == "true"
-    ? LLM_CONFIG_PASSWORDLESS
-    : LLM_KEY_CONFIG;
+import { LLM_CONFIG } from "../config/llm.js";
 
 export const getLlmChatClient = (): AzureChatOpenAI => {
   return new AzureChatOpenAI({

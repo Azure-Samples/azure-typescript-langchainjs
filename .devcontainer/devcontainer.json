@@ -13,11 +13,10 @@
 		"vscode": {
 			"extensions": [
 				"humao.rest-client",
-				"ms-azuretools.vscode-bicep",
-				"TeamsDevApp.vscode-ai-foundry"
+				"ms-azuretools.vscode-bicep"
 			]
 		}
-	},
+	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -26,7 +25,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "curl -fsSL https://aka.ms/install-azd.sh | bash"
+	// "postCreateCommand": "yarn install",
 
 	// Configure tool-specific properties.
 	// "customizations": {},

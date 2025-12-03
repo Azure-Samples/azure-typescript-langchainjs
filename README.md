@@ -29,6 +29,8 @@ The repository is organized as a monorepo with the following packages:
 - [Node.js](https://nodejs.org/) (v18 or later)
 - [npm](https://www.npmjs.com/)
 - [Azure subscription](https://azure.microsoft.com/free/)
+- Azure OpenAI service instance with deployed models
+- Azure AI Search service instance
 
 ## Getting Started
 
@@ -41,26 +43,51 @@ cd azure-typescript-langchainjs
 
 ### 2. Set up Azure resources
 
-Use Azure Developer CLI to deploy the resources.
+Create the following resources:
 
-```bash
-azd auth login
-azd up
-```
-
-This creates the resources ready to use with passwordless credentials. 
-
+* Azure AI Search
+* Azure OpenAI
+    * LLM model for chat completion
+    * Embedding model to get embeddings for PDF files
+* Optional: Azure Container Apps
+* Optional: Azure Container registry
 
 ### 3. Configure environment variables
 
-The Azure Developer CLI creates a `.env` file with the necessary environment variables. Add the following optional variables to use LangSmith observability.
+Copy the sample environment file:
+
+```bash
+cp .//sample.env ./.env
+```
+
+Update the `.env` file with the values from your Azure resources:
 
 ```
+# Embedding resource
+AZURE_OPENAI_EMBEDDING_INSTANCE="<your-openai-resource-name>"
+AZURE_OPENAI_EMBEDDING_KEY="<your-openai-key>"
+AZURE_OPENAI_EMBEDDING_MODEL="text-embedding-ada-002"
+AZURE_OPENAI_EMBEDDING_API_VERSION="2023-05-15"
+
+# LLM resource
+AZURE_OPENAI_COMPLETE_INSTANCE="<your-openai-resource-name>"
+AZURE_OPENAI_COMPLETE_KEY="<your-openai-key>"
+AZURE_OPENAI_COMPLETE_MODEL="gpt-4o"
+AZURE_OPENAI_COMPLETE_API_VERSION="2024-10-21"
+AZURE_OPENAI_COMPLETE_MAX_TOKENS=1000
+
+# Azure AI Search connection settings
+AZURE_AISEARCH_ENDPOINT="https://<your-search-resource-name>.search.windows.net"
+AZURE_AISEARCH_ADMIN_KEY="<your-search-admin-key>"
+AZURE_AISEARCH_QUERY_KEY="<your-search-query-key>"
+AZURE_AISEARCH_INDEX_NAME="northwind"
+
 # Optional LangSmith configuration
 LANGSMITH_TRACING=true
 LANGSMITH_ENDPOINT="https://api.smith.langchain.com"
 LANGSMITH_API_KEY="<your-langsmith-api-key>"
 LANGSMITH_PROJECT="<your-langsmith-project-name>"
+NORTHWIND_PDF_LOADED=false
 ```
 
 ### 4. Install dependencies
@@ -75,7 +102,7 @@ Build the `server-api` and `langgraph-agent`, then load the `./packages-v1/langg
 
 ```bash
 npm run build
-npm run load_data
+npm run load_data --workspace=langgraph-agent
 ```
 
 After the `northwind` index is created, it has 263 documents.
@@ -85,7 +112,7 @@ After the `northwind` index is created, it has 263 documents.
 #### Run the API server
 
 ```bash
-npm run start
+npm run start --workspace=server-api
 ```
 
 The server will be available at http://localhost:3000.
@@ -93,7 +120,7 @@ The server will be available at http://localhost:3000.
 #### Run the LangGraph Studio (optional)
 
 ```bash
-npm run studio
+npm run studio --workspace=langgraph-agent
 ```
 
 This will start the LangGraph Studio interface where you can visualize and debug the agent's workflow.

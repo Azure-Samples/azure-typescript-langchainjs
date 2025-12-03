@@ -7,7 +7,7 @@
     "build": "npm run build --workspaces --if-present && npm link",
     "postbuild": "cd packages-v1/langgraph-agent && npm link && cd ../server-api && npm link langgraph-agent",
     "build:docker": "docker build -t langchain-api .",
-    "start": "npm run start -w server-api",
+    "start": "node packages/server-api/dist/server-api/src/server.js",
     "dev": "npm run dev --workspaces --if-present",
     "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./.env langchain-api",
     "load_data": "npm run load_data --workspace=packages-v1/langgraph-agent"
@@ -16,12 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/Azure-Samples/azure-typescript-langchainjs.git"
   },
-  "keywords": [
-    "langchainjs",
-    "typescript",
-    "azure",
-    "azure-ai-search"
-  ],
+  "keywords": ["langchainjs", "typescript", "azure", "azure-ai-search"],
   "author": "diberry",
   "license": "ISC",
   "bugs": {
