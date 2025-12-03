@@ -1,0 +1,137 @@
+> node --env-file ../../.env ./dist/scripts/load_vector_store.js
+
+undefined
+PDF: Found 6 PDF files in /workspaces/azure-typescript-langchainjs/packages/langgraph-agent/data
+
+=== Processing PDF 1/6: Benefit_Options.pdf ===
+Warning: TT: undefined function: 32
+Warning: TT: undefined function: 32
+Warning: TT: undefined function: 32
+Loaded 4 chunks from Benefit_Options.pdf
+Processing 4 chunks in 1 batches
+Estimated time: 1s
+Processing batch 1/1 (4 chunks)
+Batch 1 completed successfully
+Completed indexing Benefit_Options.pdf
+Waiting for 2000 milliseconds
+
+=== Processing PDF 2/6: Northwind_Health_Plus_Benefits_Details.pdf ===
+Loaded 109 chunks from Northwind_Health_Plus_Benefits_Details.pdf
+Processing 109 chunks in 11 batches
+Estimated time: 11s
+Processing batch 1/11 (10 chunks)
+Batch 1 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 2/11 (10 chunks)
+Batch 2 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 3/11 (10 chunks)
+Batch 3 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 4/11 (10 chunks)
+Batch 4 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 5/11 (10 chunks)
+Batch 5 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 6/11 (10 chunks)
+Batch 6 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 7/11 (10 chunks)
+Batch 7 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 8/11 (10 chunks)
+Batch 8 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 9/11 (10 chunks)
+Batch 9 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 10/11 (10 chunks)
+Batch 10 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 11/11 (9 chunks)
+Batch 11 completed successfully
+Completed indexing Northwind_Health_Plus_Benefits_Details.pdf
+Waiting for 2000 milliseconds
+
+=== Processing PDF 3/6: Northwind_Standard_Benefits_Details.pdf ===
+Loaded 104 chunks from Northwind_Standard_Benefits_Details.pdf
+Processing 104 chunks in 11 batches
+Estimated time: 11s
+Processing batch 1/11 (10 chunks)
+Batch 1 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 2/11 (10 chunks)
+Batch 2 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 3/11 (10 chunks)
+Batch 3 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 4/11 (10 chunks)
+Batch 4 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 5/11 (10 chunks)
+Batch 5 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 6/11 (10 chunks)
+Batch 6 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 7/11 (10 chunks)
+Batch 7 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 8/11 (10 chunks)
+Batch 8 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 9/11 (10 chunks)
+Batch 9 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 10/11 (10 chunks)
+Batch 10 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 11/11 (4 chunks)
+Batch 11 completed successfully
+Completed indexing Northwind_Standard_Benefits_Details.pdf
+Waiting for 2000 milliseconds
+
+=== Processing PDF 4/6: PerksPlus.pdf ===
+Warning: TT: undefined function: 21
+Warning: TT: undefined function: 21
+Loaded 4 chunks from PerksPlus.pdf
+Processing 4 chunks in 1 batches
+Estimated time: 1s
+Processing batch 1/1 (4 chunks)
+Batch 1 completed successfully
+Completed indexing PerksPlus.pdf
+Waiting for 2000 milliseconds
+
+=== Processing PDF 5/6: employee_handbook.pdf ===
+Loaded 11 chunks from employee_handbook.pdf
+Processing 11 chunks in 2 batches
+Estimated time: 2s
+Processing batch 1/2 (10 chunks)
+Batch 1 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 2/2 (1 chunks)
+Batch 2 completed successfully
+Completed indexing employee_handbook.pdf
+Waiting for 2000 milliseconds
+
+=== Processing PDF 6/6: role_library.pdf ===
+Loaded 31 chunks from role_library.pdf
+Processing 31 chunks in 4 batches
+Estimated time: 4s
+Processing batch 1/4 (10 chunks)
+Batch 1 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 2/4 (10 chunks)
+Batch 2 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 3/4 (10 chunks)
+Batch 3 completed successfully
+Waiting for 1000 milliseconds
+Processing batch 4/4 (1 chunks)
+Batch 4 completed successfully
+Completed indexing role_library.pdf
+
+=== All PDFs processed successfully ===
+Load vector store complete

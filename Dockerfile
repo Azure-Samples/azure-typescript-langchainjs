@@ -3,9 +3,9 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 # Copy package.json files
-COPY package*.json ./
-COPY packages/langgraph-agent/package*.json ./packages/langgraph-agent/
-COPY packages/server-api/package*.json ./packages/server-api/
+COPY package.json ./
+COPY packages/langgraph-agent/package.json ./packages/langgraph-agent/
+COPY packages/server-api/package.json ./packages/server-api/
 
 # Install dependencies
 RUN npm install

@@ -77,13 +77,33 @@ export async function getDocsFromVectorStore(
 }
 
 export async function loadDocsIntoAiSearchVector(
-  embeddings: EmbeddingsInterface,
-  documents: Document[],
+  embeddingsClient: EmbeddingsInterface,
+  chunks: Document<Record<string, any>>[],
 ): Promise<AzureAISearchVectorStore> {
-  const vectorStore = await AzureAISearchVectorStore.fromDocuments(
-    documents,
-    embeddings,
-    VECTOR_STORE_ADMIN_CONFIG,
-  );
-  return vectorStore;
+  let retries = 0;
+  const maxRetries = 3;
+
+  while (retries < maxRetries) {
+    try {
+      const vectorStore = await AzureAISearchVectorStore.fromDocuments(
+        chunks,
+        embeddingsClient,
+        VECTOR_STORE_ADMIN_CONFIG,
+      );
+      return vectorStore;
+    } catch (error: any) {
+      if (error.status === 429 && retries < maxRetries - 1) {
+        const waitTime =
+          parseInt(error.headers.get("retry-after") || "10") * 1000;
+        console.log(
+          `Rate limited. Waiting ${waitTime}ms before retry ${retries + 1}...`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, waitTime));
+        retries++;
+      } else {
+        throw error;
+      }
+    }
+  }
+  throw new Error("Max retries exceeded");
 }

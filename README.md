@@ -78,6 +78,8 @@ npm run build
 npm run load_data
 ```
 
+After the `northwind` index is created, it has 263 documents.
+
 ### 6. Run the application
 
 #### Run the API server
@@ -103,8 +105,8 @@ This will start the LangGraph Studio interface where you can visualize and debug
 You can also run the application in a Docker container:
 
 ```bash
-npm run build:docker
-npm run start:docker
+docker build -t langchain-app .
+docker run -p 3000:3000 --env-file .env langchain-app
 ```
 
 This will build a Docker image and run it, exposing the API server on port 3000.
