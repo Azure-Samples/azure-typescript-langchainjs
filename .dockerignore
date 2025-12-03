@@ -1,0 +1,54 @@
+# Environment files
+.env
+.env.*
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+README.md
+CONTRIBUTING.md
+LICENSE.md
+
+# Development files
+.vscode
+.devcontainer
+.editorconfig
+
+# Node modules (will be installed during build)
+node_modules
+
+# Build outputs (will be rebuilt)
+dist
+build
+*.log
+
+# Test files
+*.test.ts
+*.spec.ts
+__tests__
+coverage
+
+# CI/CD
+.github
+.azure
+
+# IDE
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Plan and documentation
+plan.md
+insert-docs-output.txt
+
+# Sample files
+sample.env

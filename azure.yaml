@@ -6,17 +6,75 @@ infra:
   bicep:
     path: ./infra/main.bicep
     parameters:
-      userObjectId: ${AZURE_PRINCIPAL_ID}
+      principalId: ${AZURE_PRINCIPAL_ID}
 
-# To run the hook after post-provision,
-# azd env get-values
 hooks:
   postprovision:
     posix: 
       sh: bash
-      run: azd env get-values > .env
+      run: |
+        # Get environment values
+        azd env get-values > .env
+        
+        # Check if data is already loaded
+        echo "Checking if vector store data exists..."
+        INDEX_EXISTS=$(az search index show \
+          --service-name $(azd env get-values | grep AZURE_AISEARCH_ENDPOINT | cut -d'/' -f3 | cut -d'.' -f1) \
+          --name northwind \
+          --query "name" -o tsv 2>/dev/null || echo "")
+        
+        if [ -z "$INDEX_EXISTS" ]; then
+          echo "Index does not exist. Loading vector store data..."
+          npm install
+          npm run load_data
+          echo "Data loading complete!"
+        else
+          echo "Index 'northwind' already exists. Skipping data load."
+          echo "To reload data, delete the index in Azure Portal or run: npm run load_data"
+        fi
     windows:
       shell: pwsh
-      run: azd env get-values > .env
+      run: |
+        # Get environment values
+        azd env get-values > .env
+        
+        # Check if data is already loaded
+        Write-Host "Checking if vector store data exists..."
+        $searchService = (azd env get-values | Select-String "AZURE_AISEARCH_ENDPOINT").ToString().Split('/')[2].Split('.')[0]
+        $indexExists = az search index show --service-name $searchService --name northwind --query "name" -o tsv 2>$null
+        
+        if (-not $indexExists) {
+          Write-Host "Index does not exist. Loading vector store data..."
+          npm install
+          npm run load_data
+          Write-Host "Data loading complete!"
+        } else {
+          Write-Host "Index 'northwind' already exists. Skipping data load."
+          Write-Host "To reload data, delete the index in Azure Portal or run: npm run load_data"
+        }
+  
+  predeploy:
+    posix:
+      sh: bash
+      run: |
+        echo "Building and pushing container image..."
+        az acr build --registry ${CONTAINER_REGISTRY_NAME} \
+          --image langchain-api:latest \
+          --file ./Dockerfile .
+    windows:
+      shell: pwsh
+      run: |
+        Write-Host "Building and pushing container image..."
+        az acr build --registry ${CONTAINER_REGISTRY_NAME} `
+          --image langchain-api:latest `
+          --file ./Dockerfile .
 
-services: {}
+services:
+  api:
+    project: ./packages-v1/server-api
+    language: ts
+    host: containerapp
+    docker:
+      path: ../../Dockerfile
+      context: ../../
+      registry: ${CONTAINER_REGISTRY_LOGIN_SERVER}

@@ -139,3 +139,10 @@ dist
 .langgraph_api
 .DS_Store/
 build/
+
+# Azure Developer CLI
+.azure/
+
+# Bicep compiled ARM templates
+infra/**/*.json
+!infra/**/*.parameters.json
