@@ -1,7 +1,7 @@
 > node --env-file ../../.env ./dist/scripts/load_vector_store.js
 
 undefined
-PDF: Found 6 PDF files in /workspaces/azure-typescript-langchainjs/packages/langgraph-agent/data
+PDF: Found 6 PDF files in /workspaces/azure-typescript-langchainjs/packages-v1/langgraph-agent/data
 
 === Processing PDF 1/6: Benefit_Options.pdf ===
 Warning: TT: undefined function: 32

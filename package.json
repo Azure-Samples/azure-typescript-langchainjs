@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run build --workspaces --if-present && npm link",
-    "postbuild": "cd packages/langgraph-agent && npm link && cd ../server-api && npm link langgraph-agent",
+    "postbuild": "cd packages-v1/langgraph-agent && npm link && cd ../server-api && npm link langgraph-agent",
     "build:docker": "docker build -t langchain-api .",
     "start": "npm run start -w server-api",
     "dev": "npm run dev --workspaces --if-present",
     "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./.env langchain-api",
-    "load_data": "npm run load_data --workspace=packages/langgraph-agent"
+    "load_data": "npm run load_data --workspace=packages-v1/langgraph-agent"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/Azure-Samples/azure-typescript-langchainjs#readme",
   "workspaces": [
-    "packages/*"
+    "packages-v1/*"
   ],
   "devDependencies": {
     "prettier": "^3.6.2",

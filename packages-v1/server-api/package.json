@@ -1,0 +1,23 @@
+{
+  "name": "server-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node --env-file ../../.env ./dist/server.js",
+    "studio": "npm run studio -w langgraph-agent"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "fastify": "^5.6.2",
+    "langgraph-agent": "1.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
+  }
+}

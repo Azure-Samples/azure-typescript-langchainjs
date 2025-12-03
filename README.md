@@ -4,7 +4,7 @@ This sample demonstrates how to build an intelligent agent using TypeScript, [La
 
 The sample includes an HR document query system that allows users to ask questions about employee benefits and company policies, with the agent retrieving relevant information from PDF documents.
 
-![Agent Workflow](./packages/langgraph-agent/media/agent-workflow.png)
+![Agent Workflow](./packages-v1/langgraph-agent/media/agent-workflow.png)
 
 ## Features
 
@@ -71,7 +71,7 @@ npm install
 
 ### 5. Load data into vector store
 
-Build the `server-api` and `langgraph-agent`, then load the `./packages/langgraph-agent/data` into the vector store. 
+Build the `server-api` and `langgraph-agent`, then load the `./packages-v1/langgraph-agent/data` into the vector store. 
 
 ```bash
 npm run build
@@ -98,7 +98,7 @@ npm run studio
 
 This will start the LangGraph Studio interface where you can visualize and debug the agent's workflow.
 
-![LangGraph Studio](./packages/langgraph-agent/media/langgraph-platform-studio.png)
+![LangGraph Studio](./packages-v1/langgraph-agent/media/langgraph-platform-studio.png)
 
 ## Docker Support
 
