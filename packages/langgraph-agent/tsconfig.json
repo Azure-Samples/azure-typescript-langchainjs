@@ -1,6 +1,5 @@
 {
-    "extends": "@tsconfig/recommended",
-    "compilerOptions": {
+    "extends": "@tsconfig/recommended",    "compilerOptions": {
       "target": "ES2021",
       "lib": ["ES2021", "ES2022.Object", "DOM"],
       "module": "NodeNext",
@@ -16,11 +15,11 @@
       "allowJs": true,
       "strict": true,
       "strictFunctionTypes": false,
-      "outDir": "dist",
-      "types": ["node"],
-      "resolveJsonModule": true,
+      "outDir": "dist/",
+      "rootDir": "src",
+      "types": ["node"],      "resolveJsonModule": true,
       "sourceMap": true
     },
-    "include": ["**/*.ts"],
+    "include": ["src/**/*.ts"],
     "exclude": ["node_modules", "dist"]
   }
