@@ -12,12 +12,14 @@ const apiVersion = process.env.AZURE_OPENAI_EMBEDDING_API_VERSION!;
 const model = process.env.AZURE_OPENAI_EMBEDDING_MODEL!;
 const basePath = process.env.AZURE_OPENAI_BASE_PATH!;
 
+// <AZURE_OPENAI_EMBEDDINGS_UPLOAD_CONFIGURATION>
 // Rate limit configuration
 const REQUESTS_PER_MINUTE = 300;
 const BATCH_SIZE = 10; // Number of chunks to embed per batch
 const EMBEDDING_BATCH_SIZE = 5; // Chunks per API call
 const DELAY_BETWEEN_BATCHES_MS =
   (60 * 1000) / (REQUESTS_PER_MINUTE / EMBEDDING_BATCH_SIZE); // ~1 second
+// </AZURE_OPENAI_EMBEDDINGS_UPLOAD_CONFIGURATION>
 
 const shared = {
   azureOpenAIApiInstanceName: instance,
@@ -50,18 +52,53 @@ export async function waiter(ms: number): Promise<void> {
   console.log(`Waiting for ${ms} milliseconds`);
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
+// <AZURE_OPENAI_EMBEDDINGS_FUNCTION>
 export function getEmbeddingClient(): AzureOpenAIEmbeddings {
   return new AzureOpenAIEmbeddings({ ...EMBEDDINGS_CONFIG });
 }
+// </AZURE_OPENAI_EMBEDDINGS_FUNCTION>
 
-function chunkArray<T>(array: T[], chunkSize: number): T[][] {
-  const chunks: T[][] = [];
-  for (let i = 0; i < array.length; i += chunkSize) {
-    chunks.push(array.slice(i, i + chunkSize));
+// <AZURE_OPENAI_EMBEDDINGS_LOADING_FUNCTIONS>
+export async function loadPdfsFromDirectory(
+  embeddingsClient: AzureOpenAIEmbeddings,
+  dirPath: string,
+): Promise<void> {
+  try {
+    const files = await fs.readdir(dirPath);
+    const pdfFiles = files.filter((f) => f.toLowerCase().endsWith(".pdf"));
+
+    console.log(`PDF: Found ${pdfFiles.length} PDF files in ${dirPath}`);
+
+    for (let i = 0; i < pdfFiles.length; i++) {
+      const file = pdfFiles[i];
+      const fullPath = path.join(dirPath, file);
+
+      console.log(
+        `\n=== Processing PDF ${i + 1}/${pdfFiles.length}: ${file} ===`,
+      );
+
+      const pdfLoader = new PDFLoader(fullPath);
+      const langchainChunks = await pdfLoader.load();
+
+      console.log(`Loaded ${langchainChunks.length} chunks from ${file}`);
+
+      await loadDocumentsInBatches(embeddingsClient, langchainChunks);
+
+      console.log(`Completed indexing ${file}`);
+
+      // Wait between files
+      if (i < pdfFiles.length - 1) {
+        await waiter(2000); // 2 second pause between files
+      }
+    }
+
+    console.log(`\n=== All PDFs processed successfully ===`);
+  } catch (err) {
+    console.error("Error loading PDFs:", err);
+    throw err;
   }
-  return chunks;
 }
+
 async function loadDocumentsInBatches(
   embeddingsClient: AzureOpenAIEmbeddings,
   documents: Document<Record<string, any>>[],
@@ -105,42 +142,12 @@ async function loadDocumentsInBatches(
     }
   }
 }
-export async function loadPdfsFromDirectory(
-  embeddingsClient: AzureOpenAIEmbeddings,
-  dirPath: string,
-): Promise<void> {
-  try {
-    const files = await fs.readdir(dirPath);
-    const pdfFiles = files.filter((f) => f.toLowerCase().endsWith(".pdf"));
 
-    console.log(`PDF: Found ${pdfFiles.length} PDF files in ${dirPath}`);
-
-    for (let i = 0; i < pdfFiles.length; i++) {
-      const file = pdfFiles[i];
-      const fullPath = path.join(dirPath, file);
-
-      console.log(
-        `\n=== Processing PDF ${i + 1}/${pdfFiles.length}: ${file} ===`,
-      );
-
-      const pdfLoader = new PDFLoader(fullPath);
-      const langchainChunks = await pdfLoader.load();
-
-      console.log(`Loaded ${langchainChunks.length} chunks from ${file}`);
-
-      await loadDocumentsInBatches(embeddingsClient, langchainChunks);
-
-      console.log(`Completed indexing ${file}`);
-
-      // Wait between files
-      if (i < pdfFiles.length - 1) {
-        await waiter(2000); // 2 second pause between files
-      }
-    }
-
-    console.log(`\n=== All PDFs processed successfully ===`);
-  } catch (err) {
-    console.error("Error loading PDFs:", err);
-    throw err;
+function chunkArray<T>(array: T[], chunkSize: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize));
   }
+  return chunks;
 }
+// </AZURE_OPENAI_EMBEDDINGS_LOADING_FUNCTIONS>

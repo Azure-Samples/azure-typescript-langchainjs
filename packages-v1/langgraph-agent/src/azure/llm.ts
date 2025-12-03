@@ -46,7 +46,7 @@ export const getLlmChatClient = (): AzureChatOpenAI => {
     temperature: 0,
   });
 };
-
+// <AZURE_OPENAI_CHAT_FUNCTION>
 export const callChatCompletionModel = async (
   state: typeof StateAnnotation.State,
   _config: RunnableConfig,
@@ -69,3 +69,4 @@ export const callChatCompletionModel = async (
     ],
   };
 };
+// </AZURE_OPENAI_CHAT_FUNCTION>
