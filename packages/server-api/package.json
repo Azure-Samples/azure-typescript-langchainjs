@@ -5,15 +5,19 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && node -r dotenv/config ./dist/server-api/src/server.js  dotenv_config_path=../.env"
+    "start": "npm run build && node --env-file ../../.env ./dist/server-api/src/server.js",
+    "studio": "npm run studio -w langgraph-agent"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "fastify": "^5.3.0",
-    "langgraph-agent": "1.0.0",
-    "typescript": "^5.8.3"
+    "fastify": "^5.6.2",
+    "langgraph-agent": "1.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
   }
 }
