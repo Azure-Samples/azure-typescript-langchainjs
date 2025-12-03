@@ -16,10 +16,13 @@
       "strict": true,
       "strictFunctionTypes": false,
       "outDir": "dist/",
-      "rootDir": "src",
       "types": ["node"],      "resolveJsonModule": true,
-      "sourceMap": true
+      "sourceMap": true,
+      "paths": {
+        "langgraph-agent": ["../langgraph-agent/dist/index.js"],
+        "langgraph-agent/*": ["../langgraph-agent/dist/*"]
+      }
     },
-    "include": ["src/**/*.ts"],
+    "include": ["**/*.ts"],
     "exclude": ["node_modules", "dist"]
   }
