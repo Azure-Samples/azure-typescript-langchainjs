@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run build --workspaces --if-present && npm link",
-    "postbuild": "cd packages/langgraph-agent && npm link && cd ../server-api && npm link langgraph-agent",
+    "postbuild": "cd packages-v1/langgraph-agent && npm link && cd ../server-api && npm link langgraph-agent",
     "build:docker": "docker build -t langchain-api .",
     "start": "node packages/server-api/dist/server-api/src/server.js",
     "dev": "npm run dev --workspaces --if-present",
-    "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./.env langchain-api"
+    "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./.env langchain-api",
+    "load_data": "npm run load_data --workspace=packages-v1/langgraph-agent"
   },
   "repository": {
     "type": "git",
@@ -22,10 +23,11 @@
     "url": "https://github.com/Azure-Samples/azure-typescript-langchainjs/issues"
   },
   "homepage": "https://github.com/Azure-Samples/azure-typescript-langchainjs#readme",
-  "workspaces": ["packages/*"],
-  "dependencies": {
-    "typescript": "^5.8.3",
-    "dotenv": "^16.4.7",
-    "prettier": "^3.5.3"
+  "workspaces": [
+    "packages-v1/*"
+  ],
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
   }
 }
