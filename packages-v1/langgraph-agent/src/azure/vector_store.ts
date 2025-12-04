@@ -62,7 +62,7 @@ export const VECTOR_STORE_QUERY_CONFIG =
     ? VECTOR_STORE_QUERY_PASSWORDLESS
     : VECTOR_STORE_QUERY_KEY;
 
-// <AI_SEARCH_QUERY_FUNCTIONS>    
+// <AI_SEARCH_QUERY_FUNCTIONS>
 export function getReadOnlyVectorStore(): AzureAISearchVectorStore {
   const embeddings = getEmbeddingClient();
   return new AzureAISearchVectorStore(embeddings, VECTOR_STORE_QUERY_CONFIG);
@@ -77,9 +77,9 @@ export async function getDocsFromVectorStore(
   //return store.similaritySearchWithScore(query, QUERY_DOC_COUNT);
   return store.similaritySearch(query, QUERY_DOC_COUNT);
 }
-// </AI_SEARCH_QUERY_FUNCTIONS>    
+// </AI_SEARCH_QUERY_FUNCTIONS>
 
-// <AI_SEARCH_LOAD_INDEX_FUNCTIONS>    
+// <AI_SEARCH_LOAD_INDEX_FUNCTIONS>
 export async function loadDocsIntoAiSearchVector(
   embeddingsClient: EmbeddingsInterface,
   chunks: Document<Record<string, any>>[],
@@ -110,4 +110,4 @@ export async function loadDocsIntoAiSearchVector(
   }
   throw new Error("Max retries exceeded");
 }
-// </AI_SEARCH_LOAD_INDEX_FUNCTIONS>    
+// </AI_SEARCH_LOAD_INDEX_FUNCTIONS>

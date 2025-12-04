@@ -13,70 +13,76 @@ hooks:
     posix: 
       sh: bash
       run: |
-        # Get environment values
+        # Get environment values for the application
         azd env get-values > .env
+        echo "Environment configured. Data will be loaded after deployment."
+    windows:
+      shell: pwsh
+      run: |
+        azd env get-values > .env
+        Write-Host "Environment configured. Data will be loaded after deployment."
+  
+  postdeploy:
+    posix:
+      sh: bash
+      run: |
+        echo "Checking if vector store data needs to be loaded..."
         
-        # Check if data is already loaded
-        echo "Checking if vector store data exists..."
-        INDEX_EXISTS=$(az search index show \
-          --service-name $(azd env get-values | grep AZURE_AISEARCH_ENDPOINT | cut -d'/' -f3 | cut -d'.' -f1) \
-          --name northwind \
-          --query "name" -o tsv 2>/dev/null || echo "")
+        # Check if already loaded
+        INDEX_CREATED=$(azd env get-values | grep INDEX_CREATED | cut -d'=' -f2 || echo "false")
         
-        if [ -z "$INDEX_EXISTS" ]; then
-          echo "Index does not exist. Loading vector store data..."
+        if [ "$INDEX_CREATED" = "true" ]; then
+          echo "Index already created. Skipping data load."
+          echo "Current document count: $(azd env get-values | grep INDEX_DOCUMENT_COUNT | cut -d'=' -f2)"
+        else
+          echo "Loading vector store data..."
           npm install
           npm run build
           npm run load_data
-          echo "Data loading complete!"
-        else
-          echo "Index 'northwind' already exists. Skipping data load."
-          echo "To reload data, delete the index in Azure Portal or run: npm run load_data"
+          
+          # Get document count from the index
+          SEARCH_SERVICE=$(azd env get-values | grep AZURE_AISEARCH_ENDPOINT | cut -d'/' -f3 | cut -d'.' -f1)
+          DOC_COUNT=$(az search index show --service-name $SEARCH_SERVICE --name northwind --query "documentCount" -o tsv 2>/dev/null || echo "0")
+          
+          # Mark as loaded
+          azd env set INDEX_CREATED true
+          azd env set INDEX_DOCUMENT_COUNT $DOC_COUNT
+          
+          echo "Data loading complete! Indexed $DOC_COUNT documents."
         fi
     windows:
       shell: pwsh
       run: |
-        # Get environment values
-        azd env get-values > .env
+        Write-Host "Checking if vector store data needs to be loaded..."
         
-        # Check if data is already loaded
-        Write-Host "Checking if vector store data exists..."
-        $searchService = (azd env get-values | Select-String "AZURE_AISEARCH_ENDPOINT").ToString().Split('/')[2].Split('.')[0]
-        $indexExists = az search index show --service-name $searchService --name northwind --query "name" -o tsv 2>$null
+        $indexCreated = (azd env get-values | Select-String "INDEX_CREATED").ToString().Split('=')[1]
         
-        if (-not $indexExists) {
-          Write-Host "Index does not exist. Loading vector store data..."
+        if ($indexCreated -eq "true") {
+          Write-Host "Index already created. Skipping data load."
+          $docCount = (azd env get-values | Select-String "INDEX_DOCUMENT_COUNT").ToString().Split('=')[1]
+          Write-Host "Current document count: $docCount"
+        } else {
+          Write-Host "Loading vector store data..."
           npm install
           npm run build
           npm run load_data
-          Write-Host "Data loading complete!"
-        } else {
-          Write-Host "Index 'northwind' already exists. Skipping data load."
-          Write-Host "To reload data, delete the index in Azure Portal or run: npm run load_data"
+          
+          $searchService = (azd env get-values | Select-String "AZURE_AISEARCH_ENDPOINT").ToString().Split('/')[2].Split('.')[0]
+          $docCount = az search index show --service-name $searchService --name northwind --query "documentCount" -o tsv 2>$null
+          if (-not $docCount) { $docCount = "0" }
+          
+          azd env set INDEX_CREATED true
+          azd env set INDEX_DOCUMENT_COUNT $docCount
+          
+          Write-Host "Data loading complete! Indexed $docCount documents."
         }
   
-  predeploy:
-    posix:
-      sh: bash
-      run: |
-        echo "Building and pushing container image..."
-        az acr build --registry ${CONTAINER_REGISTRY_NAME} \
-          --image langchain-api:latest \
-          --file ./Dockerfile .
-    windows:
-      shell: pwsh
-      run: |
-        Write-Host "Building and pushing container image..."
-        az acr build --registry ${CONTAINER_REGISTRY_NAME} `
-          --image langchain-api:latest `
-          --file ./Dockerfile .
-
 services:
   api:
     project: ./packages-v1/server-api
     language: ts
     host: containerapp
+    resourceName: ${SERVICE_API_NAME}
     docker:
       path: ../../Dockerfile
       context: ../../
-      registry: ${CONTAINER_REGISTRY_LOGIN_SERVER}

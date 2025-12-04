@@ -119,7 +119,7 @@ module openAi 'br/public:avm/res/cognitive-services/account:0.7.1' = {
     kind: 'OpenAI'
     sku: 'S0'
     disableLocalAuth: false
-    customSubDomainName: openAiServiceName
+    //customSubDomainName: openAiServiceName
     networkAcls: {
       defaultAction: 'Allow'
       bypass: 'AzureServices'
