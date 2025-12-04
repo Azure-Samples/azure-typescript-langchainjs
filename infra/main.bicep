@@ -119,7 +119,7 @@ module openAi 'br/public:avm/res/cognitive-services/account:0.7.1' = {
     kind: 'OpenAI'
     sku: 'S0'
     disableLocalAuth: false
-    //customSubDomainName: openAiServiceName
+    customSubDomainName: openAiServiceName
     networkAcls: {
       defaultAction: 'Allow'
       bypass: 'AzureServices'
@@ -336,6 +336,7 @@ output AZURE_RESOURCE_GROUP string = resourceGroup.name
 
 // OpenAI Resource
 output AZURE_OPENAI_API_INSTANCE_NAME string = openAi.outputs.name
+output AZURE_OPENAI_BASE_PATH string = 'https://${openAi.outputs.name}.openai.azure.com'
 
 // Embedding resource
 output AZURE_OPENAI_EMBEDDING_INSTANCE string = openAi.outputs.name

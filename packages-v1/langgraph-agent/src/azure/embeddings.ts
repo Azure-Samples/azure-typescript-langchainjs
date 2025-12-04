@@ -10,7 +10,6 @@ const key = process.env.AZURE_OPENAI_EMBEDDING_KEY!;
 const instance = process.env.AZURE_OPENAI_EMBEDDING_INSTANCE!;
 const apiVersion = process.env.AZURE_OPENAI_EMBEDDING_API_VERSION!;
 const model = process.env.AZURE_OPENAI_EMBEDDING_MODEL!;
-const basePath = process.env.AZURE_OPENAI_BASE_PATH!;
 
 // <AZURE_OPENAI_EMBEDDINGS_UPLOAD_CONFIGURATION>
 // Rate limit configuration
@@ -27,6 +26,7 @@ const shared = {
   azureOpenAIApiVersion: apiVersion,
   dimensions: 1536, // for text-embedding-3-small
   batchSize: EMBEDDING_BATCH_SIZE,
+  model,
   maxRetries: 7,
   timeout: 60000,
 };
@@ -37,7 +37,6 @@ export const EMBEDDINGS_KEY_CONFIG = {
 };
 
 export const EMBEDDINGS_CONFIG_PASSWORDLESS = {
-  azureOpenAIBasePath: basePath,
   azureADTokenProvider: azureADTokenProvider_OpenAI,
   ...shared,
 };
@@ -64,6 +63,17 @@ export async function loadPdfsFromDirectory(
   dirPath: string,
 ): Promise<void> {
   try {
+    try {
+      //const testEmbedding = await embeddingsClient.embeddingWithRetry("test");
+      const testEmbedding = await embeddingsClient.embedQuery("test");
+      console.log(
+        `Test embedding generated successfully with ${testEmbedding.length} dimensions.`,
+      );
+    } catch (e) {
+      console.error("Error generating test embedding:", e);
+      throw e;
+    }
+
     const files = await fs.readdir(dirPath);
     const pdfFiles = files.filter((f) => f.toLowerCase().endsWith(".pdf"));
 

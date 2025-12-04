@@ -21,7 +21,7 @@ hooks:
       run: |
         azd env get-values > .env
         Write-Host "Environment configured. Data will be loaded after deployment."
-  
+  # azd hooks run postdeploy
   postdeploy:
     posix:
       sh: bash

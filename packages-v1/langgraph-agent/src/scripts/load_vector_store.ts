@@ -12,15 +12,17 @@ const NORTHWIND_PDF_DIRECTORY = "../../data";
 async function loadData(
   embeddingsClient: AzureOpenAIEmbeddings,
 ): Promise<void> {
-  let dataLoaded = process.env.NORTHWIND_PDF_LOADED;
-  console.log(dataLoaded);
+  const indexCreated = process.env.INDEX_CREATED;
+  const docCount = process.env.INDEX_DOCUMENT_COUNT;
 
-  if (!dataLoaded || dataLoaded === "false") {
+  if (indexCreated !== "true") {
+    console.log(
+      `Loading data into vector store... (Current docs: ${docCount || 0})`,
+    );
     const dirPath = path.join(__dirname, NORTHWIND_PDF_DIRECTORY);
     await loadPdfsFromDirectory(embeddingsClient, dirPath);
-    //await updateEnv("NORTHWIND_PDF_LOADED", "true");
   } else {
-    console.log("Data already loaded, skipping...");
+    console.log(`Data already loaded. Index has ${docCount} documents.`);
   }
 }
 
