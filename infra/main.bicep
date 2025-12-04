@@ -341,11 +341,13 @@ output AZURE_OPENAI_BASE_PATH string = 'https://${openAi.outputs.name}.openai.az
 // Embedding resource
 output AZURE_OPENAI_EMBEDDING_INSTANCE string = openAi.outputs.name
 output AZURE_OPENAI_EMBEDDING_MODEL string = embeddingModelName
+output AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME string = embeddingApiVersion
 output AZURE_OPENAI_EMBEDDING_API_VERSION string = embeddingApiVersion
 
 // LLM resource
 output AZURE_OPENAI_COMPLETE_INSTANCE string = openAi.outputs.name
 output AZURE_OPENAI_COMPLETE_MODEL string = gptModelName
+output AZURE_OPENAI_API_COMPLETIONS_DEPLOYMENT_NAME string = gptModelName
 output AZURE_OPENAI_COMPLETE_API_VERSION string = gptApiVersion
 output AZURE_OPENAI_COMPLETE_MAX_TOKENS int = 1000 // Set as needed
 

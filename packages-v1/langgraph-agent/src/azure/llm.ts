@@ -9,30 +9,25 @@ const apiVersion =
   process.env.AZURE_OPENAI_COMPLETE_API_VERSION || "2024-10-21";
 const model = process.env.AZURE_OPENAI_COMPLETE_MODEL || "gpt-4o";
 const maxTokens = process.env.AZURE_OPENAI_COMPLETE_MAX_TOKENS;
-const basePath = process.env.AZURE_OPENAI_BASE_PATH;
 
-export const LLM_KEY_CONFIG = {
-  model,
-  azureOpenAIApiKey: key,
+const shared = {
   azureOpenAIApiInstanceName: instance,
   azureOpenAIApiDeploymentName: model,
   azureOpenAIApiVersion: apiVersion,
   maxTokens: maxTokens ? parseInt(maxTokens, 10) : 100,
-  maxRetries: 1,
+  maxRetries: 7,
   timeout: 60000,
+  model,
+};
+
+export const LLM_KEY_CONFIG = {
+  azureOpenAIApiKey: key,
+  ...shared,
 };
 
 export const LLM_CONFIG_PASSWORDLESS = {
-  model,
-  azureOpenAIApiKey: undefined,
-  azureOpenAIApiInstanceName: instance,
-  azureOpenAIApiDeploymentName: model,
-  azureOpenAIApiVersion: apiVersion,
-  azureOpenAIBasePath: basePath,
   azureADTokenProvider: azureADTokenProvider_OpenAI,
-  maxTokens: maxTokens ? parseInt(maxTokens, 10) : 100,
-  maxRetries: 1,
-  timeout: 60000,
+  ...shared,
 };
 
 export const LLM_CONFIG =
