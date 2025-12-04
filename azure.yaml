@@ -26,6 +26,7 @@ hooks:
         if [ -z "$INDEX_EXISTS" ]; then
           echo "Index does not exist. Loading vector store data..."
           npm install
+          npm run build
           npm run load_data
           echo "Data loading complete!"
         else
@@ -46,6 +47,7 @@ hooks:
         if (-not $indexExists) {
           Write-Host "Index does not exist. Loading vector store data..."
           npm install
+          npm run build
           npm run load_data
           Write-Host "Data loading complete!"
         } else {

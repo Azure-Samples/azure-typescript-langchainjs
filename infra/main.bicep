@@ -365,3 +365,7 @@ output CONTAINER_APP_FQDN string = containerApp.outputs.fqdn
 output CONTAINER_APP_MANAGED_IDENTITY_CLIENT_ID string = managedIdentity.outputs.clientId
 output CONTAINER_APP_MANAGED_IDENTITY_PRINCIPAL_ID string = managedIdentity.outputs.principalId
 
+// Service mapping for azd
+output SERVICE_API_NAME string = containerApp.outputs.name
+output SERVICE_API_IMAGE_NAME string = 'langchain-api:latest'
+
