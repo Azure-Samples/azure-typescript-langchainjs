@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && node --env-file ../../.env ./dist/server.js",
+    "dev": "npm run build && node --env-file ../../.env ./dist/server.js",
     "studio": "npm run studio -w langgraph-agent"
   },
   "keywords": [],
