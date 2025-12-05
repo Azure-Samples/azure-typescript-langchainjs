@@ -52,97 +52,23 @@ Create the following resources:
 * Optional: Azure Container Apps
 * Optional: Azure Container registry
 
-### 3. Configure environment variables
-
-Copy the sample environment file:
-
 ```bash
-cp .//sample.env ./.env
+az login
+azd config set auth.useAzCliAuth true
+azd up
 ```
 
-Update the `.env` file with the values from your Azure resources:
+For the environment name, keep it short such as 7 lowercase letters: `lang-sample`.
 
-```
-# Embedding resource
-AZURE_OPENAI_EMBEDDING_INSTANCE="<your-openai-resource-name>"
-AZURE_OPENAI_EMBEDDING_KEY="<your-openai-key>"
-AZURE_OPENAI_EMBEDDING_MODEL="text-embedding-ada-002"
-AZURE_OPENAI_EMBEDDING_API_VERSION="2023-05-15"
-
-# LLM resource
-AZURE_OPENAI_COMPLETE_INSTANCE="<your-openai-resource-name>"
-AZURE_OPENAI_COMPLETE_KEY="<your-openai-key>"
-AZURE_OPENAI_COMPLETE_MODEL="gpt-4o"
-AZURE_OPENAI_COMPLETE_API_VERSION="2024-10-21"
-AZURE_OPENAI_COMPLETE_MAX_TOKENS=1000
-
-# Azure AI Search connection settings
-AZURE_AISEARCH_ENDPOINT="https://<your-search-resource-name>.search.windows.net"
-AZURE_AISEARCH_ADMIN_KEY="<your-search-admin-key>"
-AZURE_AISEARCH_QUERY_KEY="<your-search-query-key>"
-AZURE_AISEARCH_INDEX_NAME="northwind"
-
-# Optional LangSmith configuration
-LANGSMITH_TRACING=true
-LANGSMITH_ENDPOINT="https://api.smith.langchain.com"
-LANGSMITH_API_KEY="<your-langsmith-api-key>"
-LANGSMITH_PROJECT="<your-langsmith-project-name>"
-NORTHWIND_PDF_LOADED=false
-```
-
-### 4. Install dependencies
-
-```bash
-npm install
-```
-
-### 5. Load data into vector store
-
-Build the `server-api` and `langgraph-agent`, then load the `./packages-v1/langgraph-agent/data` into the vector store. 
-
-```bash
-npm run build
-npm run load_data --workspace=langgraph-agent
-```
-
-After the `northwind` index is created, it has 263 documents.
-
-### 6. Run the application
-
-#### Run the API server
-
-```bash
-npm run start --workspace=server-api
-```
-
-The server will be available at http://localhost:3000.
-
-#### Run the LangGraph Studio (optional)
-
-```bash
-npm run studio --workspace=langgraph-agent
-```
-
-This will start the LangGraph Studio interface where you can visualize and debug the agent's workflow.
-
-![LangGraph Studio](./packages-v1/langgraph-agent/media/langgraph-platform-studio.png)
-
-## Docker Support
-
-You can also run the application in a Docker container:
-
-```bash
-docker build -t langchain-app .
-docker run -p 3000:3000 --env-file .env langchain-app
-```
-
-This will build a Docker image and run it, exposing the API server on port 3000.
+Process takes up to 15 minutes:
+- Build Dockerfile
+- Create resources
+- Load Azure AI Search index with embeddings
 
 ## API Usage
 
 The API server exposes the following endpoints:
 
-- `GET /`: Health check endpoint
 - `POST /answer`: Submit a question to the agent
 
 Example request:
