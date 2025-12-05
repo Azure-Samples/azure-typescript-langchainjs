@@ -21,9 +21,8 @@ This workflow automatically validates all GitHub Actions workflows in the reposi
 
 **Jobs:**
 1. **validate-workflows**: Runs actionlint to check syntax and best practices
-2. **check-action-versions**: Uses action-validator to check for outdated versions
-3. **detect-outdated-actions**: Extracts and analyzes all actions used in workflows
-4. **summary**: Provides a consolidated summary of all validation jobs
+2. **detect-outdated-actions**: Extracts and analyzes all actions used in workflows, checks availability, and compares with latest versions
+3. **summary**: Provides a consolidated summary of all validation jobs
 
 **Outputs:**
 - A downloadable report artifact containing all actions and versions in use
@@ -54,19 +53,6 @@ bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/down
 **Usage:**
 ```bash
 actionlint .github/workflows/*.yml
-```
-
-### action-validator
-Checks for outdated GitHub Actions versions.
-
-**Installation:**
-```bash
-npm install -g action-validator
-```
-
-**Usage:**
-```bash
-action-validator .github/workflows/your-workflow.yml
 ```
 
 ## Best Practices
