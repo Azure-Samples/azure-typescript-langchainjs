@@ -35,16 +35,7 @@ jobs:
       - name: Install Azure CLI
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-      
-      - name: Install Bicep
-        run: |
-          az bicep install
-          echo "$HOME/.azure/bin" >> "$GITHUB_PATH"
-      
-      - name: Configure Bicep
-        run: |
-          az config set bicep.use_binary_from_path=false
-          az bicep version
+          az bicep upgrade
       
       - name: Validate Bicep template
         run: |
