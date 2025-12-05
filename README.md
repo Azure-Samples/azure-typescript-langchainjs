@@ -24,6 +24,20 @@ The repository is organized as a monorepo with the following packages:
 - **langgraph-agent**: Core agent implementation using LangGraph
 - **server-api**: FastAPI server exposing the agent functionality
 
+## Documentation
+
+New to Azure, LangChain, monorepos, or cloud deployment? Check out our comprehensive documentation in the [**docs**](./docs) directory:
+
+- 📚 [Getting Started](./docs/01-getting-started.md) - Quick setup and deployment guide
+- 💻 [Local Development](./docs/02-local-development.md) - Monorepo structure and npm workspaces
+- 🏗️ [Infrastructure & Deployment](./docs/03-infrastructure-deployment.md) - Azure Developer CLI and Bicep
+- 🧪 [Testing with HTTP Files](./docs/04-testing-with-http-files.md) - API testing in VS Code
+- 🔐 [Azure Identity Authentication](./docs/05-azure-identity-authentication.md) - Passwordless auth
+- 🚀 [Azure Container Apps](./docs/06-azure-container-apps.md) - Container deployment and ingress
+- 🔍 [Azure AI Search Vector Store](./docs/07-azure-ai-search-vector-store.md) - Vector database and indexing
+
+See the [documentation index](./docs/README.md) for the complete guide.
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18 or later)
