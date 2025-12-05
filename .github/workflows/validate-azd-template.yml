@@ -36,6 +36,10 @@ jobs:
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
       
+      - name: Install Bicep
+        run: |
+          az bicep install
+      
       - name: Configure Bicep
         run: |
           az config set bicep.use_binary_from_path=false
