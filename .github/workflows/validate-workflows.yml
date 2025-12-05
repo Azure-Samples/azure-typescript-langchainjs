@@ -1,0 +1,220 @@
+name: Validate GitHub Actions Workflows
+
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+  workflow_dispatch:
+  schedule:
+    # Run weekly on Monday at 9:00 AM UTC to check for outdated actions
+    - cron: '0 9 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-workflows:
+    name: Validate Workflow Files
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install actionlint
+        run: |
+          # Download actionlint v1.7.9 (pinned version with checksum verification)
+          ACTIONLINT_VERSION="1.7.9"
+          ACTIONLINT_URL="https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          EXPECTED_SHA256="233b280d05e100837f4af1433c7b40a5dcb306e3aa68fb4f17f8a7f45a7df7b4"
+          
+          curl -sL "$ACTIONLINT_URL" -o actionlint.tar.gz
+          echo "$EXPECTED_SHA256  actionlint.tar.gz" | sha256sum -c -
+          tar xzf actionlint.tar.gz
+          sudo mv ./actionlint /usr/local/bin/
+          rm actionlint.tar.gz
+          actionlint --version
+      
+      - name: Run actionlint
+        run: |
+          echo "Running actionlint to validate workflow syntax and best practices..."
+          actionlint -color
+        continue-on-error: false
+  
+  detect-outdated-actions:
+    name: Detect Outdated Actions
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Extract actions from workflows
+        id: extract-actions
+        run: |
+          echo "Extracting actions from workflow files..."
+          mkdir -p /tmp/workflow-analysis
+          
+          # Extract all 'uses:' lines from workflow files
+          find .github/workflows -name "*.yml" -o -name "*.yaml" | while IFS= read -r workflow; do
+            echo "Analyzing $workflow"
+            grep -E "^\s*uses:" "$workflow" | sed 's/.*uses:\s*//' | sed 's/#.*//' | sed 's/\s*$//' >> /tmp/workflow-analysis/actions.txt || true
+          done
+          
+          # Remove duplicates and sort
+          if [ -f /tmp/workflow-analysis/actions.txt ]; then
+            sort -u /tmp/workflow-analysis/actions.txt > /tmp/workflow-analysis/unique_actions.txt
+            echo "Found actions:"
+            cat /tmp/workflow-analysis/unique_actions.txt
+            
+            # Count actions
+            ACTION_COUNT=$(wc -l < /tmp/workflow-analysis/unique_actions.txt)
+            echo "Total unique actions: $ACTION_COUNT"
+          else
+            echo "No actions found in workflows"
+          fi
+      
+      - name: Install jq for JSON parsing
+        run: sudo apt-get update && sudo apt-get install -y jq
+      
+      - name: Check action availability and versions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Checking if actions are available on GitHub..."
+          
+          if [ ! -f /tmp/workflow-analysis/unique_actions.txt ]; then
+            echo "No actions to check"
+            exit 0
+          fi
+          
+          UNAVAILABLE_ACTIONS=""
+          
+          while IFS= read -r action; do
+            # Skip local actions (starting with ./)
+            if [[ "$action" == ./* ]]; then
+              echo "✓ Local action: $action (skipped)"
+              continue
+            fi
+            
+            # Check if action has a version specified
+            if [[ "$action" != *"@"* ]]; then
+              echo "⚠️  Warning: Action without version: $action"
+              continue
+            fi
+            
+            # Extract owner/repo and version
+            ACTION_PATH=$(echo "$action" | cut -d'@' -f1)
+            ACTION_VERSION=$(echo "$action" | cut -d'@' -f2)
+            
+            # Skip if no valid path
+            if [[ "$ACTION_PATH" != *"/"* ]]; then
+              continue
+            fi
+            
+            echo "Checking $ACTION_PATH@$ACTION_VERSION..."
+            
+            # Use GitHub API with authentication for better rate limits
+            API_URL="https://api.github.com/repos/$ACTION_PATH"
+            RESPONSE=$(curl -s -w "\n%{http_code}" \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "$API_URL")
+            
+            HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+            
+            if [ "$HTTP_CODE" -eq 200 ]; then
+              echo "✓ Action available: $action"
+              
+              # Try to fetch latest release for comparison
+              RELEASE_RESPONSE=$(curl -s \
+                -H "Authorization: token $GITHUB_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "$API_URL/releases/latest")
+              
+              LATEST_RELEASE=$(echo "$RELEASE_RESPONSE" | jq -r '.tag_name // empty')
+              
+              if [ -n "$LATEST_RELEASE" ] && [ "$ACTION_VERSION" != "$LATEST_RELEASE" ]; then
+                echo "  ℹ️  Latest version available: $LATEST_RELEASE (current: $ACTION_VERSION)"
+              fi
+            else
+              echo "✗ Action not found or inaccessible: $action (HTTP $HTTP_CODE)"
+              UNAVAILABLE_ACTIONS="${UNAVAILABLE_ACTIONS}${action}"$'\n'
+            fi
+          done < /tmp/workflow-analysis/unique_actions.txt
+          
+          if [ -n "$UNAVAILABLE_ACTIONS" ]; then
+            echo ""
+            echo "⚠️  Warning: Some actions are unavailable:"
+            echo "$UNAVAILABLE_ACTIONS"
+          fi
+      
+      - name: Generate action version report
+        run: |
+          {
+            echo "## Action Version Report"
+            echo ""
+            echo "This report lists all GitHub Actions used in workflows:"
+            echo ""
+          } > /tmp/workflow-analysis/report.md
+          
+          if [ -f /tmp/workflow-analysis/unique_actions.txt ]; then
+            {
+              echo "| Action | Version | Status |"
+              echo "|--------|---------|--------|"
+            } >> /tmp/workflow-analysis/report.md
+            
+            while IFS= read -r action; do
+              ACTION_PATH=$(echo "$action" | cut -d'@' -f1)
+              ACTION_VERSION=$(echo "$action" | cut -d'@' -f2)
+              echo "| \`$ACTION_PATH\` | \`$ACTION_VERSION\` | ✓ In use |" >> /tmp/workflow-analysis/report.md
+            done < /tmp/workflow-analysis/unique_actions.txt
+          else
+            echo "No actions found in workflows." >> /tmp/workflow-analysis/report.md
+          fi
+          
+          {
+            echo ""
+            echo "---"
+            echo "Generated on: $(date -u)"
+          } >> /tmp/workflow-analysis/report.md
+          
+          cat /tmp/workflow-analysis/report.md
+      
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: workflow-validation-report
+          path: /tmp/workflow-analysis/report.md
+          retention-days: 30
+
+  summary:
+    name: Validation Summary
+    runs-on: ubuntu-latest
+    needs: [validate-workflows, detect-outdated-actions]
+    if: always()
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Create summary
+        run: |
+          {
+            echo "# Workflow Validation Summary"
+            echo ""
+            echo "✅ All workflow validation jobs completed"
+            echo ""
+            echo "## Jobs Status:"
+            echo "- Validate Workflows: ${{ needs.validate-workflows.result }}"
+            echo "- Detect Outdated Actions: ${{ needs.detect-outdated-actions.result }}"
+          } >> "$GITHUB_STEP_SUMMARY"
