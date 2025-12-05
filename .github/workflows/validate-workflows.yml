@@ -12,10 +12,15 @@ on:
     # Run weekly on Monday at 9:00 AM UTC to check for outdated actions
     - cron: '0 9 * * 1'
 
+permissions:
+  contents: read
+
 jobs:
   validate-workflows:
     name: Validate Workflow Files
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -44,6 +49,8 @@ jobs:
   detect-outdated-actions:
     name: Detect Outdated Actions
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -196,6 +203,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [validate-workflows, detect-outdated-actions]
     if: always()
+    permissions:
+      contents: read
     
     steps:
       - name: Create summary
