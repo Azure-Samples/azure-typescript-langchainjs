@@ -15,7 +15,8 @@
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node ./dist/index.js",
-    "langgraph_cli:version": "npx @langchain/langgraph-cli --version"
+    "langgraph_cli:version": "npx @langchain/langgraph-cli --version",
+    "clean": "rm -rf ./dist"
   },
   "author": "diberry",
   "license": "MIT",

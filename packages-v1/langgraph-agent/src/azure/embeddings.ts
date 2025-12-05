@@ -20,6 +20,7 @@ const DELAY_BETWEEN_BATCHES_MS =
   (60 * 1000) / (REQUESTS_PER_MINUTE / EMBEDDING_BATCH_SIZE); // ~1 second
 // </AZURE_OPENAI_EMBEDDINGS_UPLOAD_CONFIGURATION>
 
+// <AZURE_OPENAI_EMBEDDINGS_AUTH>
 const shared = {
   azureOpenAIApiInstanceName: instance,
   azureOpenAIApiEmbeddingsDeploymentName: model,
@@ -46,19 +47,19 @@ export const EMBEDDINGS_CONFIG =
   process.env.SET_PASSWORDLESS == "true"
     ? EMBEDDINGS_CONFIG_PASSWORDLESS
     : EMBEDDINGS_KEY_CONFIG;
+// </AZURE_OPENAI_EMBEDDINGS_AUTH>
 
-console.log(EMBEDDINGS_CONFIG);
+// <AZURE_OPENAI_EMBEDDINGS_FUNCTION>
+export function getEmbeddingClient(): AzureOpenAIEmbeddings {
+  return new AzureOpenAIEmbeddings({ ...EMBEDDINGS_CONFIG });
+}
+// </AZURE_OPENAI_EMBEDDINGS_FUNCTION>
 
 export async function waiter(ms: number): Promise<void> {
   // waiting for ms milliseconds
   console.log(`Waiting for ${ms} milliseconds`);
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-// <AZURE_OPENAI_EMBEDDINGS_FUNCTION>
-export function getEmbeddingClient(): AzureOpenAIEmbeddings {
-  return new AzureOpenAIEmbeddings({ ...EMBEDDINGS_CONFIG });
-}
-// </AZURE_OPENAI_EMBEDDINGS_FUNCTION>
 
 // <AZURE_OPENAI_EMBEDDINGS_LOADING_FUNCTIONS>
 export async function loadPdfsFromDirectory(

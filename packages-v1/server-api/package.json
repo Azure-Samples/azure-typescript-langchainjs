@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "npm run build && node --env-file ../../.env ./dist/server.js",
-    "studio": "npm run studio -w langgraph-agent"
+    "studio": "npm run studio -w langgraph-agent",
+    "clean": "rm -rf ./dist"
   },
   "keywords": [],
   "author": "",

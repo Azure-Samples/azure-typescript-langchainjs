@@ -9,6 +9,42 @@ infra:
       principalId: ${AZURE_PRINCIPAL_ID}
 
 hooks:
+  prepackage:
+    posix:
+      sh: bash
+      run: |
+        # Validate environment name
+        ENV_NAME=$(azd env get-values | grep AZURE_ENV_NAME | cut -d'=' -f2 | tr -d '"')
+        
+        if [[ ! "$ENV_NAME" =~ ^[a-z][a-z0-9-]*[a-z0-9]$ ]]; then
+          echo "ERROR: Environment name '$ENV_NAME' is invalid."
+          echo "Must start with a letter, end with letter/number, and contain only lowercase letters, numbers, and hyphens."
+          exit 1
+        fi
+        
+        if [[ ${#ENV_NAME} -lt 3 || ${#ENV_NAME} -gt 64 ]]; then
+          echo "ERROR: Environment name must be between 3 and 64 characters."
+          exit 1
+        fi
+        
+        echo "Environment name '$ENV_NAME' is valid."
+    windows:
+      shell: pwsh
+      run: |
+        $envName = (azd env get-values | Select-String "AZURE_ENV_NAME").ToString().Split('=')[1].Trim('"')
+        
+        if ($envName -notmatch '^[a-z][a-z0-9-]*[a-z0-9]$') {
+          Write-Error "Environment name '$envName' is invalid. Must start with a letter, end with letter/number, and contain only lowercase letters, numbers, and hyphens."
+          exit 1
+        }
+        
+        if ($envName.Length -lt 3 -or $envName.Length -gt 64) {
+          Write-Error "Environment name must be between 3 and 64 characters."
+          exit 1
+        }
+        
+        Write-Host "Environment name '$envName' is valid."
+  
   postprovision:
     posix: 
       sh: bash
