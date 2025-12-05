@@ -8,12 +8,15 @@
   },
   "scripts": {
     "load_data": "node --env-file ../../.env ./dist/scripts/load_vector_store.js",
+    "embed": "node --env-file ../../.env ./dist/scripts/embed.js",
+    "llm": "node --env-file ../../.env ./dist/scripts/llm.js",
     "studio": "npm run build && npx @langchain/langgraph-cli dev",
     "prebuild": "prettier --write './src/**/*.{ts,tsx}'",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node ./dist/index.js",
-    "langgraph_cli:version": "npx @langchain/langgraph-cli --version"
+    "langgraph_cli:version": "npx @langchain/langgraph-cli --version",
+    "clean": "rm -rf ./dist"
   },
   "author": "diberry",
   "license": "MIT",

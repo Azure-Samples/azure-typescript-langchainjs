@@ -52,3 +52,19 @@ insert-docs-output.txt
 
 # Sample files
 sample.env
+
+# AZD
+.azure
+.azd/
+*.http
+infra/
+media/
+data/
+packages/
+azure.yaml
+Dockerfile
+docker-compose.yaml
+packages-v1/*/dist/
+packages-v1/*/node_modules/
+insert-docs-output.txt
+langgraph.json

@@ -336,15 +336,18 @@ output AZURE_RESOURCE_GROUP string = resourceGroup.name
 
 // OpenAI Resource
 output AZURE_OPENAI_API_INSTANCE_NAME string = openAi.outputs.name
+output AZURE_OPENAI_BASE_PATH string = 'https://${openAi.outputs.name}.openai.azure.com'
 
 // Embedding resource
 output AZURE_OPENAI_EMBEDDING_INSTANCE string = openAi.outputs.name
 output AZURE_OPENAI_EMBEDDING_MODEL string = embeddingModelName
+output AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME string = embeddingApiVersion
 output AZURE_OPENAI_EMBEDDING_API_VERSION string = embeddingApiVersion
 
 // LLM resource
 output AZURE_OPENAI_COMPLETE_INSTANCE string = openAi.outputs.name
 output AZURE_OPENAI_COMPLETE_MODEL string = gptModelName
+output AZURE_OPENAI_API_COMPLETIONS_DEPLOYMENT_NAME string = gptModelName
 output AZURE_OPENAI_COMPLETE_API_VERSION string = gptApiVersion
 output AZURE_OPENAI_COMPLETE_MAX_TOKENS int = 1000 // Set as needed
 
@@ -364,4 +367,8 @@ output CONTAINER_APP_NAME string = containerApp.outputs.name
 output CONTAINER_APP_FQDN string = containerApp.outputs.fqdn
 output CONTAINER_APP_MANAGED_IDENTITY_CLIENT_ID string = managedIdentity.outputs.clientId
 output CONTAINER_APP_MANAGED_IDENTITY_PRINCIPAL_ID string = managedIdentity.outputs.principalId
+
+// Service mapping for azd
+output SERVICE_API_NAME string = containerApp.outputs.name
+output SERVICE_API_IMAGE_NAME string = 'langchain-api:latest'
 

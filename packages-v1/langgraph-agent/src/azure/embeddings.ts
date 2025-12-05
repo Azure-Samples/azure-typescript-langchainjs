@@ -10,8 +10,7 @@ const key = process.env.AZURE_OPENAI_EMBEDDING_KEY!;
 const instance = process.env.AZURE_OPENAI_EMBEDDING_INSTANCE!;
 const apiVersion = process.env.AZURE_OPENAI_EMBEDDING_API_VERSION!;
 const model = process.env.AZURE_OPENAI_EMBEDDING_MODEL!;
-const basePath = process.env.AZURE_OPENAI_BASE_PATH!;
-
+const azureOpenAIBasePath = `https://${process.env.AZURE_OPENAI_EMBEDDING_INSTANCE}.openai.azure.com/openai/deployments`;
 // <AZURE_OPENAI_EMBEDDINGS_UPLOAD_CONFIGURATION>
 // Rate limit configuration
 const REQUESTS_PER_MINUTE = 300;
@@ -21,12 +20,15 @@ const DELAY_BETWEEN_BATCHES_MS =
   (60 * 1000) / (REQUESTS_PER_MINUTE / EMBEDDING_BATCH_SIZE); // ~1 second
 // </AZURE_OPENAI_EMBEDDINGS_UPLOAD_CONFIGURATION>
 
+// <AZURE_OPENAI_EMBEDDINGS_AUTH>
 const shared = {
   azureOpenAIApiInstanceName: instance,
   azureOpenAIApiEmbeddingsDeploymentName: model,
   azureOpenAIApiVersion: apiVersion,
+  azureOpenAIBasePath,
   dimensions: 1536, // for text-embedding-3-small
   batchSize: EMBEDDING_BATCH_SIZE,
+  model,
   maxRetries: 7,
   timeout: 60000,
 };
@@ -37,7 +39,6 @@ export const EMBEDDINGS_KEY_CONFIG = {
 };
 
 export const EMBEDDINGS_CONFIG_PASSWORDLESS = {
-  azureOpenAIBasePath: basePath,
   azureADTokenProvider: azureADTokenProvider_OpenAI,
   ...shared,
 };
@@ -46,17 +47,19 @@ export const EMBEDDINGS_CONFIG =
   process.env.SET_PASSWORDLESS == "true"
     ? EMBEDDINGS_CONFIG_PASSWORDLESS
     : EMBEDDINGS_KEY_CONFIG;
+// </AZURE_OPENAI_EMBEDDINGS_AUTH>
+
+// <AZURE_OPENAI_EMBEDDINGS_FUNCTION>
+export function getEmbeddingClient(): AzureOpenAIEmbeddings {
+  return new AzureOpenAIEmbeddings({ ...EMBEDDINGS_CONFIG });
+}
+// </AZURE_OPENAI_EMBEDDINGS_FUNCTION>
 
 export async function waiter(ms: number): Promise<void> {
   // waiting for ms milliseconds
   console.log(`Waiting for ${ms} milliseconds`);
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-// <AZURE_OPENAI_EMBEDDINGS_FUNCTION>
-export function getEmbeddingClient(): AzureOpenAIEmbeddings {
-  return new AzureOpenAIEmbeddings({ ...EMBEDDINGS_CONFIG });
-}
-// </AZURE_OPENAI_EMBEDDINGS_FUNCTION>
 
 // <AZURE_OPENAI_EMBEDDINGS_LOADING_FUNCTIONS>
 export async function loadPdfsFromDirectory(
@@ -64,6 +67,17 @@ export async function loadPdfsFromDirectory(
   dirPath: string,
 ): Promise<void> {
   try {
+    try {
+      //const testEmbedding = await embeddingsClient.embeddingWithRetry("test");
+      const testEmbedding = await embeddingsClient.embedQuery("test");
+      console.log(
+        `Test embedding generated successfully with ${testEmbedding.length} dimensions.`,
+      );
+    } catch (e) {
+      console.error("Error generating test embedding:", e);
+      throw e;
+    }
+
     const files = await fs.readdir(dirPath);
     const pdfFiles = files.filter((f) => f.toLowerCase().endsWith(".pdf"));
 
