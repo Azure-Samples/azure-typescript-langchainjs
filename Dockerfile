@@ -28,8 +28,11 @@ COPY --from=build /app/packages-v1/langgraph-agent/dist ./packages-v1/langgraph-
 COPY --from=build /app/packages-v1/server-api/package*.json ./packages-v1/server-api/
 COPY --from=build /app/packages-v1/server-api/dist ./packages-v1/server-api/dist
 
-# Install production dependencies only
-RUN npm ci --omit=dev --workspace=packages-v1/server-api --workspace=packages-v1/langgraph-agent
+# Install production dependencies only with better timeout/retry settings
+RUN npm config set fetch-retries 5 && \
+    npm config set fetch-retry-mintimeout 20000 && \
+    npm config set fetch-retry-maxtimeout 120000 && \
+    npm ci --omit=dev --workspace=packages-v1/server-api --workspace=packages-v1/langgraph-agent
 
 # Expose port
 EXPOSE 3000
