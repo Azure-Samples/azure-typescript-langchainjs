@@ -39,7 +39,7 @@ jobs:
       - name: Install Bicep
         run: |
           az bicep install
-          echo "$HOME/.azure/bin" >> $GITHUB_PATH
+          echo "$HOME/.azure/bin" >> "$GITHUB_PATH"
       
       - name: Configure Bicep
         run: |
