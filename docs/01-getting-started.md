@@ -53,19 +53,16 @@ azd up
 
 ### 4. Wait for Document Indexing
 
-After deployment completes, the system will automatically index PDF documents into Azure AI Search. The sample includes **262 documents** that need to be indexed before you can use the `/answer` endpoint effectively.
+After deployment completes, the system will automatically index PDF documents into Azure AI Search. The sample includes **263 documents** that need to be indexed before you can use the `/answer` endpoint effectively.
 
 You can check the indexing status in the deployment output, or use the Azure Portal to view your Azure AI Search service.
 
 ### 5. Test the API
 
-Once indexing is complete, you can test the API:
+Once indexing is complete, you can test the API using the URL displayed at the end of the `azd up` command:
 
 ```bash
-# Get the deployed app URL from azd
-azd env get-values | grep SERVICE_API_URI
-
-# Test the API
+# Test the API (use the URL from azd up output)
 curl -X POST <YOUR_API_URL>/answer \
   -H "Content-Type: application/json" \
   -d '{"question": "What are the standard benefit options?"}'
@@ -90,7 +87,7 @@ If deployment fails, check:
 ### Can't Query Documents
 
 If queries return empty results:
-- Ensure all 262 documents are indexed (check `INDEX_DOCUMENT_COUNT` in environment variables)
+- Ensure all 263 documents are indexed (check `INDEX_DOCUMENT_COUNT` in environment variables)
 - Wait a few minutes after deployment for indexing to complete
 - Check the Azure AI Search service in the Azure Portal
 

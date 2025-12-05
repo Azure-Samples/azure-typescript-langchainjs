@@ -62,13 +62,9 @@ This will install dependencies for both the root project and all workspace packa
 
 ### 2. Configure Environment Variables
 
-Create a `.env` file in the repository root:
+**Prerequisites**: Complete the `azd up` deployment first (see [Getting Started](./01-getting-started.md)), which automatically creates the `.env` file with all necessary Azure resource information.
 
-```bash
-cp sample.env .env
-```
-
-Edit `.env` with your Azure resource information:
+If you need to manually update environment variables, edit the `.env` file in the repository root:
 
 ```bash
 # Azure OpenAI
@@ -132,14 +128,16 @@ The API server will start on `http://localhost:3000`.
 
 ### Working with Vector Data
 
+**Note**: If you deployed with `azd up`, vector data is already loaded. These commands are only needed if you're setting up from scratch without using `azd up`.
+
 ```bash
-# Load PDF documents into Azure AI Search index
+# Load PDF documents into Azure AI Search index (only needed if not using azd up)
 npm run load_data
 
-# Test embedding generation
+# Test embedding generation (useful for verifying Azure OpenAI authentication)
 npm run embed
 
-# Test LLM completion
+# Test LLM completion (useful for verifying Azure OpenAI authentication)
 npm run llm
 ```
 

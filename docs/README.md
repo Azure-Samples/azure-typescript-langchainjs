@@ -74,7 +74,7 @@ See [Azure Container Apps](./06-azure-container-apps.md) for details.
 
 ### Vector Store Indexing
 
-The application loads **262 documents** into Azure AI Search as embedding vectors. You must wait for indexing to complete before using the `/answer` endpoint.
+The application loads **263 documents** into Azure AI Search as embedding vectors. You must wait for indexing to complete before using the `/answer` endpoint.
 
 See [Azure AI Search Vector Store](./07-azure-ai-search-vector-store.md) for details.
 
@@ -137,8 +137,8 @@ See [Azure Container Apps](./06-azure-container-apps.md) and [Azure AI Search Ve
 
 ### Empty or Poor Answers
 
-- Wait for all 262 documents to be indexed
-- Check `INDEX_DOCUMENT_COUNT` equals 262
+- Wait for all 263 documents to be indexed
+- Check `INDEX_DOCUMENT_COUNT` equals 263
 - Verify Azure AI Search and OpenAI are accessible
 - Review application logs for errors
 
@@ -165,7 +165,7 @@ See [Azure Container Apps](./06-azure-container-apps.md) and [Azure AI Search Ve
 ┌─────────────────────────┐      ┌──────────────────────────┐
 │  Azure OpenAI           │      │  Azure AI Search         │
 │  ├─ GPT-4 (completion) │      │  ├─ Index: northwind     │
-│  └─ Embeddings          │      │  └─ 262 vector docs      │
+│  └─ Embeddings          │      │  └─ 263 vector docs      │
 └─────────────────────────┘      └──────────────────────────┘
 ```
 

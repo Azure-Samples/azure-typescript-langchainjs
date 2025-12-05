@@ -216,7 +216,7 @@ If answers are empty or low quality:
    ```bash
    azd env get-values | grep INDEX_DOCUMENT_COUNT
    ```
-   Should show 262 documents.
+   Should show 263 documents.
 
 2. **Verify Azure AI Search connection**:
    - Check `AZURE_AISEARCH_ENDPOINT` in `.env`
@@ -251,7 +251,7 @@ See [Azure Identity Authentication](./05-azure-identity-authentication.md) for m
 1. **Use descriptive questions**: Clear, specific questions get better answers
 2. **Test incrementally**: Start with simple questions, then try complex ones
 3. **Check server logs**: Monitor console output for errors and performance
-4. **Wait for indexing**: Ensure all 262 documents are indexed before testing
+4. **Wait for indexing**: Ensure all 263 documents are indexed before testing
 5. **Version control**: Don't commit `.http` files with production URLs or sensitive data
 
 ## Creating Your Own Test Files

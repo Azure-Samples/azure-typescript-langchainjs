@@ -70,6 +70,8 @@ export async function azureADTokenProvider_OpenAI() {
 }
 ```
 
+**About the token provider**: The `azureADTokenProvider` is specific to third-party SDKs like LangChain that don't natively support Azure SDK authentication patterns. When using official Azure SDKs (like `@azure/search-documents`), you can pass the `DefaultAzureCredential` directly without a token provider. However, LangChain's `@langchain/openai` package requires a token provider function that returns a string token, hence this wrapper.
+
 This token provider is used when initializing Azure OpenAI clients in LangChain:
 
 **File**: `packages-v1/langgraph-agent/src/azure/llm.ts`

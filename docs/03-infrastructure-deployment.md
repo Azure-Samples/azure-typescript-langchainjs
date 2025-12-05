@@ -141,7 +141,6 @@ All configuration is injected as environment variables:
 - Azure OpenAI instance names and model names
 - API versions for completions and embeddings
 - `SET_PASSWORDLESS=true` for managed identity authentication
-- `AZURE_CLIENT_ID` for the managed identity
 
 ## Deployment Commands
 
@@ -162,6 +161,8 @@ This runs the complete deployment pipeline:
 
 ### Incremental Commands
 
+**Note**: These commands are handled automatically by `azd up` hooks. You typically won't need to run them manually unless you're doing custom development.
+
 ```bash
 # Provision/update infrastructure only
 azd provision
@@ -169,22 +170,20 @@ azd provision
 # Deploy application code only (infrastructure must exist)
 azd deploy
 
-# View environment variables
-azd env get-values
-
-# Set environment variable
-azd env set KEY value
-
 # Delete all resources
-azd down
+azd down --purge
 ```
+
+**About `--purge` flag**: Using `azd down --purge` immediately releases Azure resource quotas. Without `--purge`, some resources (like OpenAI deployments) may hold quota for up to 48 hours, which could prevent redeployment.
 
 ## Bicep Infrastructure as Code
 
-The `infra/main.bicep` file uses Azure Verified Modules (AVM) for best-practice resource configuration:
+The `infra/main.bicep` file uses [Azure Verified Modules (AVM)](https://azure.github.io/Azure-Verified-Modules/) for best-practice resource configuration.
+
+**Why use AVM?** Azure Verified Modules provide pre-built, tested, and maintained Bicep modules that follow Microsoft's best practices. Instead of writing raw Bicep resource definitions, you use these curated modules which handle security, networking, and configuration complexity for you. This reduces errors and ensures your infrastructure follows Azure's recommended patterns.
 
 ```bicep
-// Example: OpenAI deployment
+// Example: OpenAI deployment using AVM
 module openAi 'br/public:avm/res/cognitive-services/account:0.7.1' = {
   params: {
     name: openAiServiceName
@@ -203,10 +202,11 @@ module openAi 'br/public:avm/res/cognitive-services/account:0.7.1' = {
 }
 ```
 
-### Benefits of Bicep:
+### Benefits of Bicep with AVM:
 - **Type safety**: Catch errors at compile time
 - **Intellisense**: Editor support for Azure resource properties
 - **Modularity**: Reusable modules from Azure Verified Modules
+- **Best practices built-in**: Security, networking, and configuration handled correctly
 - **Idempotent**: Safe to run multiple times
 - **Declarative**: Describe desired state, not steps
 
@@ -217,16 +217,28 @@ module openAi 'br/public:avm/res/cognitive-services/account:0.7.1' = {
 The environment name is used to generate unique resource names:
 
 ```bash
-# Resource naming pattern
-${environmentName}${resourceToken}-{service}
-
-# Example with environmentName="lang-exam"
-lang-examxxxxxxxxxxxxx-openai
-lang-examxxxxxxxxxxxxx-search
-lang-examxxxxxxxxxxxxx-rg
+# Resource naming pattern (from infra/main.bicep)
+var prefix = '${environmentName}${resourceToken}'
 ```
 
-**Important**: Keep environment names short (7-10 characters) to avoid exceeding Azure resource name length limits.
+**Important**: Environment name must be **lowercase** and kept short (7-10 characters) to avoid exceeding Azure resource name length limits.
+
+### Resource Naming Table
+
+Based on the Bicep template (`infra/main.bicep`), here are the actual resource names created:
+
+| Resource Type | Naming Pattern | Example (env="langexam") |
+|--------------|----------------|--------------------------|
+| Resource Group | `${prefix}-rg` | `langexamxxxxxxxxxxxxx-rg` |
+| OpenAI Service | `${prefix}-openai` | `langexamxxxxxxxxxxxxx-openai` |
+| AI Search | `${prefix}-search` | `langexamxxxxxxxxxxxxx-search` |
+| Container Registry | `${prefix}acr` (no hyphens) | `langexamxxxxxxxxxxxxxacr` |
+| Log Analytics | `${prefix}-logs` | `langexamxxxxxxxxxxxxx-logs` |
+| Container Apps Environment | `${prefix}-env` | `langexamxxxxxxxxxxxxx-env` |
+| Managed Identity | `${prefix}-identity` | `langexamxxxxxxxxxxxxx-identity` |
+| Container App | `app-${resourceToken}` | `app-xxxxxxxxxxxxx` |
+
+Where `prefix = environmentName + resourceToken` (13-char hash).
 
 ### Resource Token
 
@@ -245,6 +257,16 @@ The application is currently configured to deploy to specific regions with OpenA
 - **swedencentral** (Sweden Central)
 
 These regions support the required GPT and embedding models. See [Azure OpenAI Model Availability](https://learn.microsoft.com/azure/ai-services/openai/concepts/models) for the latest regional information.
+
+**To update allowed regions**: Edit the `location` parameter's `@allowed` array in `infra/main.bicep` (lines 11-15):
+
+```bicep
+@allowed([
+  'eastus2'
+  'swedencentral'
+])
+param location string
+```
 
 ## Monitoring and Troubleshooting
 
@@ -292,7 +314,7 @@ The resources created incur costs:
 
 **Tip**: Delete resources when not in use:
 ```bash
-azd down
+azd down --purge
 ```
 
 ## Additional Resources

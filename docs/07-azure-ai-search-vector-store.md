@@ -11,7 +11,7 @@ This guide explains how the application uses Azure AI Search as a vector databas
 - **Scalability**: Handle millions of documents
 
 This application uses Azure AI Search to:
-1. Store embeddings of PDF documents (262 documents)
+1. Store embeddings of PDF documents (263 documents)
 2. Perform similarity search to find relevant documents
 3. Provide context for the LangChain RAG (Retrieval Augmented Generation) system
 
@@ -85,7 +85,7 @@ The application loads documents from the `packages-v1/langgraph-agent/data/` dir
 - **12 JSON files**: Structured data examples
 - **PDF files** (assumed): Employee handbook, benefits documentation
 
-Total: **262 document chunks** after processing
+Total: **263 document chunks** after processing
 
 ### Loading Process
 
@@ -185,11 +185,11 @@ Other search types available (not used in this sample):
 - **`SimilarityHybrid`**: Combines vector and keyword search
 - **`SemanticHybrid`**: Uses semantic ranking for better relevance
 
-## Document Count: 262 Documents
+## Document Count: 263 Documents
 
 ### Why This Matters
 
-The application needs **all 262 documents indexed** before the `/answer` endpoint works effectively:
+The application needs **all 263 documents indexed** before the `/answer` endpoint works effectively:
 
 - **Incomplete index**: May return poor or irrelevant answers
 - **Complete index**: Provides comprehensive context for questions
@@ -202,7 +202,7 @@ azd env get-values | grep INDEX_
 
 # Expected output:
 # INDEX_CREATED=true
-# INDEX_DOCUMENT_COUNT=262
+# INDEX_DOCUMENT_COUNT=263
 ```
 
 ### Indexing Time
@@ -226,7 +226,7 @@ postdeploy:
     else
       npm run load_data
       azd env set INDEX_CREATED true
-      azd env set INDEX_DOCUMENT_COUNT 262
+      azd env set INDEX_DOCUMENT_COUNT 263
     fi
 ```
 
@@ -385,7 +385,7 @@ If queries return no documents:
    ```bash
    azd env get-values | grep INDEX_DOCUMENT_COUNT
    ```
-   Should show 262.
+   Should show 263.
 
 3. **Verify authentication**: Ensure passwordless auth is working
 
@@ -417,7 +417,7 @@ Azure AI Search pricing depends on:
 This sample uses:
 - **SKU**: Basic (~$75/month)
 - **Replicas**: 1 (no high availability)
-- **Partitions**: 1 (sufficient for 262 documents)
+- **Partitions**: 1 (sufficient for 263 documents)
 
 **Cost optimization**:
 - Use Basic tier for development
