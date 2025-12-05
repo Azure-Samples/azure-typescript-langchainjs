@@ -23,8 +23,13 @@ jobs:
       
       - name: Install actionlint
         run: |
-          # Download actionlint v1.7.9 (pinned version)
-          curl -sL https://github.com/rhysd/actionlint/releases/download/v1.7.9/actionlint_1.7.9_linux_amd64.tar.gz -o actionlint.tar.gz
+          # Download actionlint v1.7.9 (pinned version with checksum verification)
+          ACTIONLINT_VERSION="1.7.9"
+          ACTIONLINT_URL="https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          EXPECTED_SHA256="233b280d05e100837f4af1433c7b40a5dcb306e3aa68fb4f17f8a7f45a7df7b4"
+          
+          curl -sL "$ACTIONLINT_URL" -o actionlint.tar.gz
+          echo "$EXPECTED_SHA256  actionlint.tar.gz" | sha256sum -c -
           tar xzf actionlint.tar.gz
           sudo mv ./actionlint /usr/local/bin/
           rm actionlint.tar.gz
@@ -69,6 +74,9 @@ jobs:
             echo "No actions found in workflows"
           fi
       
+      - name: Install jq for JSON parsing
+        run: sudo apt-get update && sudo apt-get install -y jq
+      
       - name: Check action availability and versions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -89,44 +97,56 @@ jobs:
               continue
             fi
             
+            # Check if action has a version specified
+            if [[ "$action" != *"@"* ]]; then
+              echo "⚠️  Warning: Action without version: $action"
+              continue
+            fi
+            
             # Extract owner/repo and version
             ACTION_PATH=$(echo "$action" | cut -d'@' -f1)
             ACTION_VERSION=$(echo "$action" | cut -d'@' -f2)
             
-            # Check if action exists
-            if [[ "$ACTION_PATH" == *"/"* ]]; then
-              echo "Checking $ACTION_PATH@$ACTION_VERSION..."
+            # Skip if no valid path
+            if [[ "$ACTION_PATH" != *"/"* ]]; then
+              continue
+            fi
+            
+            echo "Checking $ACTION_PATH@$ACTION_VERSION..."
+            
+            # Use GitHub API with authentication for better rate limits
+            API_URL="https://api.github.com/repos/$ACTION_PATH"
+            RESPONSE=$(curl -s -w "\n%{http_code}" \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "$API_URL")
+            
+            HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+            
+            if [ "$HTTP_CODE" -eq 200 ]; then
+              echo "✓ Action available: $action"
               
-              # Use GitHub API with authentication for better rate limits
-              API_URL="https://api.github.com/repos/$ACTION_PATH"
-              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+              # Try to fetch latest release for comparison
+              RELEASE_RESPONSE=$(curl -s \
                 -H "Authorization: token $GITHUB_TOKEN" \
                 -H "Accept: application/vnd.github.v3+json" \
-                "$API_URL")
+                "$API_URL/releases/latest")
               
-              if [ "$HTTP_CODE" -eq 200 ]; then
-                echo "✓ Action available: $action"
-                
-                # Try to fetch latest release for comparison
-                LATEST_RELEASE=$(curl -s \
-                  -H "Authorization: token $GITHUB_TOKEN" \
-                  -H "Accept: application/vnd.github.v3+json" \
-                  "$API_URL/releases/latest" | grep '"tag_name":' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/' || echo "")
-                
-                if [ -n "$LATEST_RELEASE" ] && [ "$ACTION_VERSION" != "$LATEST_RELEASE" ]; then
-                  echo "  ℹ️  Latest version available: $LATEST_RELEASE (current: $ACTION_VERSION)"
-                fi
-              else
-                echo "✗ Action not found or inaccessible: $action (HTTP $HTTP_CODE)"
-                UNAVAILABLE_ACTIONS="${UNAVAILABLE_ACTIONS}${action}\n"
+              LATEST_RELEASE=$(echo "$RELEASE_RESPONSE" | jq -r '.tag_name // empty')
+              
+              if [ -n "$LATEST_RELEASE" ] && [ "$ACTION_VERSION" != "$LATEST_RELEASE" ]; then
+                echo "  ℹ️  Latest version available: $LATEST_RELEASE (current: $ACTION_VERSION)"
               fi
+            else
+              echo "✗ Action not found or inaccessible: $action (HTTP $HTTP_CODE)"
+              UNAVAILABLE_ACTIONS="${UNAVAILABLE_ACTIONS}${action}"$'\n'
             fi
           done < /tmp/workflow-analysis/unique_actions.txt
           
           if [ -n "$UNAVAILABLE_ACTIONS" ]; then
             echo ""
             echo "⚠️  Warning: Some actions are unavailable:"
-            echo -e "$UNAVAILABLE_ACTIONS"
+            echo "$UNAVAILABLE_ACTIONS"
           fi
       
       - name: Generate action version report
