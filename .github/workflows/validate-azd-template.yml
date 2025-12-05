@@ -1,0 +1,57 @@
+name: Validate AZD Template
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'azure.yaml'
+      - 'infra/**'
+      - '.github/workflows/validate-azd-template.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'azure.yaml'
+      - 'infra/**'
+      - '.github/workflows/validate-azd-template.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  validate:
+    name: Validate Bicep Template
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+      
+      - name: Configure Bicep
+        run: |
+          az config set bicep.use_binary_from_path=false
+          az bicep version
+      
+      - name: Validate Bicep template
+        run: |
+          echo "Validating Bicep template..."
+          az bicep build -f infra/main.bicep --stdout
+          echo "Bicep template validation completed successfully!"
+      
+      - name: Run Microsoft Security DevOps Analysis
+        uses: microsoft/security-devops-action@latest
+        id: msdo
+        with:
+          categories: 'IaC'
+          tools: 'templateanalyzer'
+      
+      - name: Upload results to Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ steps.msdo.outputs.sarifFile }}
