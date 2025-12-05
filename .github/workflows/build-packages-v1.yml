@@ -7,7 +7,6 @@ on:
     paths:
       - 'packages-v1/**'
       - 'package.json'
-      - 'package-lock.json'
       - '.github/workflows/build-packages-v1.yml'
   pull_request:
     branches:
@@ -15,8 +14,9 @@ on:
     paths:
       - 'packages-v1/**'
       - 'package.json'
-      - 'package-lock.json'
       - '.github/workflows/build-packages-v1.yml'
+  schedule:
+    - cron: '0 0 * * 0'
   workflow_dispatch:
 
 permissions:
@@ -41,7 +41,7 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       
       - name: Build packages-v1
         run: npm run build
