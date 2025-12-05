@@ -10,7 +10,7 @@ const key = process.env.AZURE_OPENAI_EMBEDDING_KEY!;
 const instance = process.env.AZURE_OPENAI_EMBEDDING_INSTANCE!;
 const apiVersion = process.env.AZURE_OPENAI_EMBEDDING_API_VERSION!;
 const model = process.env.AZURE_OPENAI_EMBEDDING_MODEL!;
-
+const azureOpenAIBasePath = `https://${process.env.AZURE_OPENAI_EMBEDDING_INSTANCE}.openai.azure.com/openai/deployments`;
 // <AZURE_OPENAI_EMBEDDINGS_UPLOAD_CONFIGURATION>
 // Rate limit configuration
 const REQUESTS_PER_MINUTE = 300;
@@ -24,6 +24,7 @@ const shared = {
   azureOpenAIApiInstanceName: instance,
   azureOpenAIApiEmbeddingsDeploymentName: model,
   azureOpenAIApiVersion: apiVersion,
+  azureOpenAIBasePath,
   dimensions: 1536, // for text-embedding-3-small
   batchSize: EMBEDDING_BATCH_SIZE,
   model,
@@ -45,6 +46,8 @@ export const EMBEDDINGS_CONFIG =
   process.env.SET_PASSWORDLESS == "true"
     ? EMBEDDINGS_CONFIG_PASSWORDLESS
     : EMBEDDINGS_KEY_CONFIG;
+
+console.log(EMBEDDINGS_CONFIG);
 
 export async function waiter(ms: number): Promise<void> {
   // waiting for ms milliseconds

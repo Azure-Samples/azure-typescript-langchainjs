@@ -10,7 +10,9 @@
     "start": "node packages/server-api/dist/server.js",
     "dev": "npm run dev --workspaces --if-present",
     "start:docker": "npm run build:docker && docker run -p 3000:3000 --env-file ./.env langchain-api",
-    "load_data": "npm run load_data --workspace=packages-v1/langgraph-agent"
+    "load_data": "npm run load_data --workspace=packages-v1/langgraph-agent",
+    "embed": "npm run embed --workspace=packages-v1/langgraph-agent",
+    "llm": "npm run llm --workspace=packages-v1/langgraph-agent"
   },
   "repository": {
     "type": "git",

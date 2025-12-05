@@ -8,6 +8,8 @@
   },
   "scripts": {
     "load_data": "node --env-file ../../.env ./dist/scripts/load_vector_store.js",
+    "embed": "node --env-file ../../.env ./dist/scripts/embed.js",
+    "llm": "node --env-file ../../.env ./dist/scripts/llm.js",
     "studio": "npm run build && npx @langchain/langgraph-cli dev",
     "prebuild": "prettier --write './src/**/*.{ts,tsx}'",
     "build": "tsc",
