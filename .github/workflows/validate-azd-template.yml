@@ -45,7 +45,7 @@ jobs:
           echo "Bicep template validation completed successfully!"
       
       - name: Run Microsoft Security DevOps Analysis
-        uses: microsoft/security-devops-action@latest
+        uses: microsoft/security-devops-action@v1
         id: msdo
         with:
           categories: 'IaC'
