@@ -235,7 +235,7 @@ module containerApp 'br/public:avm/res/app/container-app:0.11.0' = {
   name: 'containerApp'
   scope: resourceGroup
   params: {
-    name: '${prefix}-app'
+    name: 'app-${resourceToken}'
     location: location
     tags: tags
     environmentResourceId: containerAppsEnvironment.outputs.resourceId
