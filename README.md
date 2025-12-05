@@ -49,16 +49,23 @@ Create the following resources:
 * Azure OpenAI
     * LLM model for chat completion
     * Embedding model to get embeddings for PDF files
-* Optional: Azure Container Apps
-* Optional: Azure Container registry
+* Azure Container Apps
+* Azure Container registry
+
+Use Azure CLI for authentication and let Azure Developer CLI know that. 
 
 ```bash
 az login
 azd config set auth.useAzCliAuth true
+```
+
+Begin deployment
+
+```bash
 azd up
 ```
 
-For the environment name, keep it short such as 7 lowercase letters: `lang-sample`.
+For the environment name, keep it short such as 7 lowercase letters: `lang-exam`.
 
 Process takes up to 15 minutes:
 - Build Dockerfile
