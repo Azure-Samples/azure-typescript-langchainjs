@@ -22,7 +22,6 @@ const shared = {
   maxTokens: maxTokens ? parseInt(maxTokens, 10) : 100,
   maxRetries: 7,
   timeout: 60000,
-  model,
   temperature: 0,
 };
 
