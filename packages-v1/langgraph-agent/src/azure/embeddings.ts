@@ -28,7 +28,6 @@ const shared = {
   azureOpenAIBasePath,
   dimensions: 1536, // for text-embedding-3-small
   batchSize: EMBEDDING_BATCH_SIZE,
-  model,
   maxRetries: 7,
   timeout: 60000,
 };

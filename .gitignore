@@ -137,7 +137,7 @@ dist
 
 # Custom ignore patterns (non-duplicates)
 .langgraph_api
-.DS_Store/
+.DS_Store
 build/
 
 # Azure Developer CLI
