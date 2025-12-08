@@ -4,8 +4,7 @@
   "description": "Azure TypeScript LangchainJS Sample for Azure OpenAI and Azure AI Search.",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build --workspaces --if-present && npm link",
-    "postbuild": "cd packages-v1/langgraph-agent && npm link && cd ../server-api && npm link langgraph-agent",
+    "build": "npm run build --workspaces --if-present",
     "build:docker": "docker build -t langchain-api .",
     "start": "node packages/server-api/dist/server.js",
     "dev": "npm run dev --workspaces --if-present",
@@ -19,7 +18,12 @@
     "type": "git",
     "url": "git+https://github.com/Azure-Samples/azure-typescript-langchainjs.git"
   },
-  "keywords": ["langchainjs", "typescript", "azure", "azure-ai-search"],
+  "keywords": [
+    "langchainjs",
+    "typescript",
+    "azure",
+    "azure-ai-search"
+  ],
   "author": "diberry",
   "license": "ISC",
   "bugs": {
