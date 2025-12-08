@@ -9,6 +9,7 @@ import { CREDENTIAL } from "../azure/azure-credential.js";
 import { AzureAISearchConfig } from "@langchain/community/vectorstores/azure_aisearch";
 import { waiter } from "./embeddings.js";
 
+// <AZURE_AI_SEARCH_AUTH>
 const endpoint = process.env.AZURE_AISEARCH_ENDPOINT;
 const indexName = process.env.AZURE_AISEARCH_INDEX_NAME;
 
@@ -61,7 +62,7 @@ export const VECTOR_STORE_QUERY_CONFIG =
   process.env.SET_PASSWORDLESS == "true"
     ? VECTOR_STORE_QUERY_PASSWORDLESS
     : VECTOR_STORE_QUERY_KEY;
-
+// </AZURE_AI_SEARCH_AUTH>
 // <AI_SEARCH_QUERY_FUNCTIONS>
 export function getReadOnlyVectorStore(): AzureAISearchVectorStore {
   const embeddings = getEmbeddingClient();
