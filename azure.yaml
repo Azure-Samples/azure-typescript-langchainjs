@@ -11,7 +11,7 @@ infra:
 hooks:
   prepackage:
     posix:
-      sh: bash
+      shell: sh
       run: |
         # Validate environment name
         ENV_NAME=$(azd env get-values | grep AZURE_ENV_NAME | cut -d'=' -f2 | tr -d '"')
@@ -116,7 +116,7 @@ hooks:
   
   postprovision:
     posix: 
-      sh: bash
+      shell: sh
       run: |
         # Get environment values for the application
         azd env get-values > .env
@@ -129,7 +129,7 @@ hooks:
   # azd hooks run postdeploy
   postdeploy:
     posix:
-      sh: bash
+      shell: sh
       run: |
         echo "Checking if vector store data needs to be loaded..."
         
@@ -181,7 +181,21 @@ hooks:
           
           Write-Host "Data loading complete! Indexed $docCount documents."
         }
-  
+
+  postdown:
+    posix:
+      shell: sh
+      run: |
+        echo "Cleaning up environment file..."
+        rm -f .env
+        echo "Environment file removed."
+    windows:
+      shell: pwsh
+      run: |
+        Write-Host "Cleaning up environment file..."
+        Remove-Item -Path .env -ErrorAction SilentlyContinue
+        Write-Host "Environment file removed."
+
 services:
   api:
     project: ./packages-v1/server-api

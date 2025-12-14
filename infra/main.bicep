@@ -332,6 +332,7 @@ module acrPullRoleAssignment 'br/public:avm/ptn/authorization/resource-role-assi
 // Resources
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
+output AZURE_PRINCIPAL_ID string = managedIdentity.outputs.principalId
 output AZURE_RESOURCE_GROUP string = resourceGroup.name
 
 // OpenAI Resource
@@ -367,6 +368,7 @@ output CONTAINER_APP_NAME string = containerApp.outputs.name
 output CONTAINER_APP_FQDN string = containerApp.outputs.fqdn
 output CONTAINER_APP_MANAGED_IDENTITY_CLIENT_ID string = managedIdentity.outputs.clientId
 output CONTAINER_APP_MANAGED_IDENTITY_PRINCIPAL_ID string = managedIdentity.outputs.principalId
+output AZURE_CLIENT_ID string = managedIdentity.outputs.clientId
 
 // Service mapping for azd
 output SERVICE_API_NAME string = containerApp.outputs.name
