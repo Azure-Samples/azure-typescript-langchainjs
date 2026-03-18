@@ -7,8 +7,8 @@ import { azureADTokenProvider_OpenAI } from "./azure-credential.js";
 const key = process.env.AZURE_OPENAI_COMPLETE_KEY;
 const instance = process.env.AZURE_OPENAI_COMPLETE_INSTANCE;
 const apiVersion =
-  process.env.AZURE_OPENAI_COMPLETE_API_VERSION || "2024-10-21";
-const model = process.env.AZURE_OPENAI_COMPLETE_MODEL || "gpt-4o";
+  process.env.AZURE_OPENAI_COMPLETE_API_VERSION || "2025-01-01-preview";
+const model = process.env.AZURE_OPENAI_COMPLETE_MODEL || "gpt-4.1-mini";
 const maxTokens = process.env.AZURE_OPENAI_COMPLETE_MAX_TOKENS;
 const azureOpenAIBasePath = `https://${process.env.AZURE_OPENAI_COMPLETE_INSTANCE}.openai.azure.com/openai/deployments`;
 // </AZURE_OPENAI_LLM_UPLOAD_CONFIGURATION>

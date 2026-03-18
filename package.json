@@ -12,7 +12,8 @@
     "load_data": "npm run load_data --workspace=packages-v1/langgraph-agent",
     "embed": "npm run embed --workspace=packages-v1/langgraph-agent",
     "llm": "npm run llm --workspace=packages-v1/langgraph-agent",
-    "clean": "npm run clean --workspaces --if-present"
+    "clean": "npm run clean --workspaces --if-present",
+    "validate:config": "node scripts/validate-config.mjs"
   },
   "repository": {
     "type": "git",
