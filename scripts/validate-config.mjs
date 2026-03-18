@@ -5,7 +5,7 @@
  *   - infra/main.bicep (Azure deployment config)
  *   - Source code fallback defaults (packages-v1/.../azure/*.ts)
  *
- * Run: node scripts/validate-config.js
+ * Run: node scripts/validate-config.mjs
  * Exit code 0 = all consistent, 1 = mismatch detected
  */
 
