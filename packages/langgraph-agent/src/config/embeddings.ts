@@ -3,7 +3,7 @@ const instance = process.env.AZURE_OPENAI_EMBEDDING_INSTANCE;
 const apiVersion =
   process.env.AZURE_OPENAI_EMBEDDING_API_VERSION || "2023-05-15";
 const model =
-  process.env.AZURE_OPENAI_EMBEDDING_MODEL || "text-embedding-ada-002";
+  process.env.AZURE_OPENAI_EMBEDDING_MODEL || "text-embedding-3-small";
 
 export const EMBEDDINGS_CONFIG = {
   azureOpenAIApiKey: key,
