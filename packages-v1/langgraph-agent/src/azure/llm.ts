@@ -19,7 +19,7 @@ const shared = {
   azureOpenAIApiDeploymentName: model,
   azureOpenAIApiVersion: apiVersion,
   azureOpenAIBasePath,
-  maxTokens: maxTokens ? parseInt(maxTokens, 10) : 100,
+  maxTokens: maxTokens ? parseInt(maxTokens, 10) : 1000,
   maxRetries: 7,
   timeout: 60000,
   temperature: 0,
