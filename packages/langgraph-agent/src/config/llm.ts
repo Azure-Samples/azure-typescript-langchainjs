@@ -1,8 +1,8 @@
 const key = process.env.AZURE_OPENAI_COMPLETE_KEY;
 const instance = process.env.AZURE_OPENAI_COMPLETE_INSTANCE;
 const apiVersion =
-  process.env.AZURE_OPENAI_COMPLETE_API_VERSION || "2024-10-21";
-const model = process.env.AZURE_OPENAI_COMPLETE_MODEL || "gpt-4o";
+  process.env.AZURE_OPENAI_COMPLETE_API_VERSION || "2025-01-01-preview";
+const model = process.env.AZURE_OPENAI_COMPLETE_MODEL || "gpt-4.1-mini";
 const maxTokens = process.env.AZURE_OPENAI_COMPLETE_MAX_TOKENS;
 
 export const LLM_CONFIG = {
@@ -11,7 +11,7 @@ export const LLM_CONFIG = {
   azureOpenAIApiInstanceName: instance,
   azureOpenAIApiDeploymentName: model,
   azureOpenAIApiVersion: apiVersion,
-  maxTokens: maxTokens ? parseInt(maxTokens, 10) : 100,
+  maxTokens: maxTokens ? parseInt(maxTokens, 10) : 1000,
   maxRetries: 1,
   timeout: 60000,
 };

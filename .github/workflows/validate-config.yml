@@ -1,0 +1,42 @@
+name: Validate Config Consistency
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'sample.env'
+      - 'infra/**'
+      - 'packages-v1/**/azure/llm.ts'
+      - 'packages-v1/**/azure/embeddings.ts'
+      - 'packages/**/config/*.ts'
+      - 'scripts/validate-config.mjs'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'sample.env'
+      - 'infra/**'
+      - 'packages-v1/**/azure/llm.ts'
+      - 'packages-v1/**/azure/embeddings.ts'
+      - 'packages/**/config/*.ts'
+      - 'scripts/validate-config.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-config:
+    name: Check sample.env ↔ Bicep ↔ Source consistency
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate config consistency
+        run: node scripts/validate-config.mjs
