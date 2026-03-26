@@ -8,6 +8,7 @@ on:
       - 'infra/**'
       - 'packages-v1/**/azure/llm.ts'
       - 'packages-v1/**/azure/embeddings.ts'
+      - 'packages/**/config/*.ts'
       - 'scripts/validate-config.mjs'
   pull_request:
     branches: [main]
@@ -16,6 +17,7 @@ on:
       - 'infra/**'
       - 'packages-v1/**/azure/llm.ts'
       - 'packages-v1/**/azure/embeddings.ts'
+      - 'packages/**/config/*.ts'
       - 'scripts/validate-config.mjs'
   workflow_dispatch:
 

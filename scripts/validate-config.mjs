@@ -71,25 +71,31 @@ const CONFIG_CHECKS = [
     label: "GPT model name",
     envKey: "AZURE_OPENAI_COMPLETE_MODEL",
     bicepParam: "gptModelName",
-    sourceFile: "packages-v1/langgraph-agent/src/azure/llm.ts",
+    sourceFiles: [
+      "packages-v1/langgraph-agent/src/azure/llm.ts",
+      "packages/langgraph-agent/src/config/llm.ts",
+    ],
   },
   {
     label: "GPT API version",
     envKey: "AZURE_OPENAI_COMPLETE_API_VERSION",
     bicepParam: "gptApiVersion",
-    sourceFile: "packages-v1/langgraph-agent/src/azure/llm.ts",
+    sourceFiles: [
+      "packages-v1/langgraph-agent/src/azure/llm.ts",
+      "packages/langgraph-agent/src/config/llm.ts",
+    ],
   },
   {
     label: "Embedding model name",
     envKey: "AZURE_OPENAI_EMBEDDING_MODEL",
     bicepParam: "embeddingModelName",
-    sourceFile: null, // no fallback in embeddings.ts (uses ! assertion)
+    sourceFiles: [],
   },
   {
     label: "Embedding API version",
     envKey: "AZURE_OPENAI_EMBEDDING_API_VERSION",
     bicepParam: "embeddingApiVersion",
-    sourceFile: null,
+    sourceFiles: [],
   },
 ];
 
@@ -126,24 +132,24 @@ for (const check of CONFIG_CHECKS) {
     warnings++;
   }
 
-  // Check source fallback if applicable
-  if (check.sourceFile) {
-    const srcPath = resolve(ROOT, check.sourceFile);
+  // Check source fallbacks if applicable
+  for (const sourceFile of check.sourceFiles ?? []) {
+    const srcPath = resolve(ROOT, sourceFile);
     if (!sourceCache[srcPath]) {
       try {
         sourceCache[srcPath] = parseSourceFallbacks(srcPath);
       } catch {
         sourceCache[srcPath] = {};
-        console.log(`    ⚠️  Could not read ${check.sourceFile}`);
+        console.log(`    ⚠️  Could not read ${sourceFile}`);
         warnings++;
       }
     }
     const fallback = sourceCache[srcPath][check.envKey];
     if (fallback) {
-      console.log(`    source fallback     → ${fallback}`);
+      console.log(`    ${sourceFile} → ${fallback}`);
       if (bicepValue && fallback !== bicepValue) {
         console.log(
-          `    ❌ Source fallback "${fallback}" doesn't match bicep "${bicepValue}"`,
+          `    ❌ Source fallback "${fallback}" in ${sourceFile} doesn't match bicep "${bicepValue}"`,
         );
         errors++;
       } else if (bicepValue) {
