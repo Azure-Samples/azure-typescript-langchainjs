@@ -37,5 +37,8 @@
   "devDependencies": {
     "prettier": "^3.6.2",
     "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "handlebars": "4.7.9"
   }
 }
