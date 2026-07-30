@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -12,22 +12,28 @@ permissions:
 
 jobs:
   build:
-    name: Build and Test
+    name: Build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    
+    strategy:
+      matrix:
+        node-version: [22, 24]
+      fail-fast: false
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-      
-      - name: Setup Node.js
+
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
       - name: Install dependencies
-        run: npm install
-      
+        run: npm ci
+
       - name: Build project
         run: npm run build
+
+      - name: Validate config consistency
+        run: npm run validate:config
